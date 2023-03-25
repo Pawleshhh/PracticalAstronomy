@@ -6,7 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Library.fs" />
+    <Compile Include="Time\TimeHelper.fs" />
+    <Compile Include="Time\TimeDataTypes.fs" />
+    <Compile Include="Time\Time.fs" />
   </ItemGroup>
 
 </Project>
