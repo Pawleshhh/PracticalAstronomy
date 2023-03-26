@@ -69,9 +69,25 @@ let dateTimeToGst (dateTime : DateTime) =
     let T = S / 36_525.0
     let T0 = 
         (6.697_374_558 + (2_400.051_336 * T) + (0.000_025_862 * T * T))
-        |> reduceToRange (0.0) (24.0)
+        |> reduceToRange 0.0 24.0
     let gst = 
         (dateTime.TimeOfDay.TotalHours * 1.002_737_909 + T0)
-        |> reduceToRange (0.0) (24.0)
+        |> reduceToRange 0.0 24.0
 
     TimeSpan.FromHours gst
+
+let gstToUt (gst : DateTime) =
+    let jd = dateTimeToJulianDate gst.Date
+
+    let S = jd.jd - 2_451_545.0
+    let T = S / 36_525.0
+    let T0 = 
+        (6.697_374_558 + (2_400.051_336 * T) + (0.000_025_862 * T * T))
+        |> reduceToRange 0.0 24.0
+    let decimalGst = gst.TimeOfDay.TotalHours
+    let B = 
+        (decimalGst - T0) 
+        |> reduceToRange 0.0 24.0 
+        |> (*) 0.997_269_5663
+
+    TimeSpan.FromHours B

@@ -18,3 +18,8 @@ let ``Test julianDateToDateTime`` (jd : float) (ey : int) (em : int) (ed : int) 
 let ``Test dateTimeToGst`` (y : int) (m : int) (d : int) (h : int) (min : int) (s : int) (mil : int) (gst : float) =
     let result = dateTimeToGst (new DateTime(y, m, d, h, min, s, mil))
     Assert.That(result.TotalHours, Is.EqualTo(gst).Within(1E-6))
+
+[<TestCase(1980, 4, 22, 4, 40, 5, 230, 14.614_353)>]
+let ``Test gstToUt`` (y : int) (m : int) (d : int) (h : int) (min : int) (s : int) (mil : int) (ut : float) =
+    let result = gstToUt (new DateTime(y, m, d, h, min, s, mil))
+    Assert.That(result.TotalHours, Is.EqualTo(ut).Within(1E-6))
