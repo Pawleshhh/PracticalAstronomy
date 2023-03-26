@@ -28,10 +28,10 @@ let dateTimeToJulianDate (dateTime : DateTime) =
 
     let D = (30.6001 * ((m' + 1) |> float)) |> truncate
 
-    { JulianDate.julianDate = B + C + D + d + 1_720_994.5 }
+    { JulianDate.jd = B + C + D + d + 1_720_994.5 }
 
 let julianDateToDateTime (julianDate : JulianDate) =
-    let jd = julianDate.julianDate + 0.5
+    let jd = julianDate.jd + 0.5
     let I, F = intAndFrac jd
 
     let B =
@@ -61,3 +61,17 @@ let julianDateToDateTime (julianDate : JulianDate) =
     let dateTime = new DateTime(y, m, id)
 
     dateTime.AddHours (fd * 24.0)
+
+let dateTimeToGst (dateTime : DateTime) =
+    let jd = dateTimeToJulianDate dateTime.Date
+
+    let S = jd.jd - 2_451_545.0
+    let T = S / 36_525.0
+    let T0 = 
+        (6.697_374_558 + (2_400.051_336 * T) + (0.000_025_862 * T * T))
+        |> reduceToRange (0.0) (24.0)
+    let gst = 
+        (dateTime.TimeOfDay.TotalHours * 1.002_737_909 + T0)
+        |> reduceToRange (0.0) (24.0)
+
+    TimeSpan.FromHours gst

@@ -5,11 +5,16 @@ open NUnit.Framework
 open PracticalAstronomy.Time
 
 [<TestCase(2009, 6, 19, 18, 2_455_002.25)>]
-let ``Test dateTimeToJulianDate`` (year : int) (month : int) (day : int) (hour : int) (expectedJulianDate : float) =
-    let result = dateTimeToJulianDate (new DateTime(year, month, day, hour, 0, 0))
-    Assert.That(result.julianDate, Is.EqualTo(expectedJulianDate))
+let ``Test dateTimeToJulianDate`` (y : int) (m : int) (d : int) (h : int) (expectedJd : float) =
+    let result = dateTimeToJulianDate (new DateTime(y, m, d, h, 0, 0))
+    Assert.That(result.jd, Is.EqualTo(expectedJd))
 
 [<TestCase(2_455_002.25, 2009, 6, 19, 18)>]
-let ``Test julianDateToDateTime`` (julianDate : float) (eyear : int) (emonth : int) (eday : int) (ehour : int)  =
-    let result = julianDateToDateTime ({ julianDate = julianDate })
-    Assert.That(result, Is.EqualTo(new DateTime(eyear, emonth, eday, ehour, 0, 0)))
+let ``Test julianDateToDateTime`` (jd : float) (ey : int) (em : int) (ed : int) (eh : int)  =
+    let result = julianDateToDateTime ({ jd = jd })
+    Assert.That(result, Is.EqualTo(new DateTime(ey, em, ed, eh, 0, 0)))
+
+[<TestCase(1980, 4, 22, 14, 36, 51, 670, 4.668_120)>]
+let ``Test dateTimeToGst`` (y : int) (m : int) (d : int) (h : int) (min : int) (s : int) (mil : int) (gst : float) =
+    let result = dateTimeToGst (new DateTime(y, m, d, h, min, s, mil))
+    Assert.That(result.TotalHours, Is.EqualTo(gst).Within(1E-6))

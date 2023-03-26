@@ -1,5 +1,5 @@
 ﻿namespace PracticalAstronomy
 
 type JulianDate = {
-    julianDate : float
+    jd : float
 }
