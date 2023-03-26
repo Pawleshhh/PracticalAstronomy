@@ -23,3 +23,13 @@ let ``Test dateTimeToGst`` (y : int) (m : int) (d : int) (h : int) (min : int) (
 let ``Test gstToUt`` (y : int) (m : int) (d : int) (h : int) (min : int) (s : int) (mil : int) (ut : float) =
     let result = gstToUt (new DateTime(y, m, d, h, min, s, mil))
     Assert.That(result.TotalHours, Is.EqualTo(ut).Within(1E-6))
+
+[<TestCase(-64.0, 4, 40, 5, 230, 0.401_453)>]
+let ``Test gstToLst`` (longitude : float) (h : int) (m : int) (d : int) (mil : int) (lst : float) =
+    let result = gstToLst longitude (new TimeSpan(0, h, m, d, mil))
+    Assert.That(result.TotalHours, Is.EqualTo(lst).Within(1E-6))
+
+[<TestCase(-64.0, 0, 24, 5, 230, 4.668_119)>]
+let ``Test lstToGst`` (longitude : float) (h : int) (m : int) (d : int) (mil : int) (lst : float) =
+    let result = lstToGst longitude (new TimeSpan(0, h, m, d, mil))
+    Assert.That(result.TotalHours, Is.EqualTo(lst).Within(1E-6))

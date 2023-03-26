@@ -91,3 +91,15 @@ let gstToUt (gst : DateTime) =
         |> (*) 0.997_269_5663
 
     TimeSpan.FromHours B
+
+let gstToLst (longitude : float) (gst : TimeSpan) =
+    longitude / 15.0
+    |> (+) gst.TotalHours
+    |> reduceToRange 0.0 24.0
+    |> TimeSpan.FromHours
+
+let lstToGst (longitude : float) (lst : TimeSpan) =
+    longitude / 15.0
+    |> (-) lst.TotalHours
+    |> reduceToRange 0.0 24.0
+    |> TimeSpan.FromHours
