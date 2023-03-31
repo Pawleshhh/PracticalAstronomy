@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Coordinates\CoordinatesTest.fs" />
     <Compile Include="Time\TimeTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
