@@ -11,8 +11,12 @@ public class Coordinates
     public double HourAngleToRightAscension(DateTime dateTime, double longitude, double hourAngle)
         => PracticalAstronomy.Coordinates.haToRa(dateTime, longitude, hourAngle);
 
-    public Coord2D EquatorialToHorizon(Coord2D equatorial, double latitude)
+    public Coord2D EquatorialToHorizontal(Coord2D equatorial, double latitude)
         => Coord2D.FromTuple(
-            PracticalAstronomy.Coordinates.equatorialToHorizon(equatorial.X, equatorial.Y, latitude));
+            PracticalAstronomy.Coordinates.equatorialToHorizontal(equatorial.X, equatorial.Y, latitude));
+
+    public Coord2D HorizontalToEquatorial(Coord2D horizontal, double latitude)
+        => Coord2D.FromTuple(
+            PracticalAstronomy.Coordinates.horizontalToEquatorial(horizontal.X, horizontal.Y, latitude));
 
 }

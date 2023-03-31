@@ -17,6 +17,11 @@ let ``Test haToRa`` (ha : float) (longitude : float) (year : int) (month : int) 
     Assert.That(result, Is.EqualTo(ra).Within(1E-6))
 
 [<TestCase(5.862_222, 23.219_444, 52.0, 19.334_345, 283.271_027)>]
-let ``Test equatorialToHorizon`` (ha : float) (dec : float) (latitude : float) (alt : float) (az : float) =
-    let result = equatorialToHorizon (ha, dec) latitude
+let ``Test equatorialToHorizontal`` (ha : float) (dec : float) (latitude : float) (alt : float) (az : float) =
+    let result = equatorialToHorizontal (ha, dec) latitude
     Assert.That(result, Is.EqualTo((alt, az)).Within(1E-5))
+
+[<TestCase(19.334_344, 283.271_028, 52.0, 5.862_222, 23.219_444)>]
+let ``Test horizontalToEquatorial`` (alt : float) (az : float) (latitude : float) (ha : float) (dec : float) =
+    let result = horizontalToEquatorial (alt, az) latitude
+    Assert.That(result, Is.EqualTo((ha, dec)).Within(1E-5))

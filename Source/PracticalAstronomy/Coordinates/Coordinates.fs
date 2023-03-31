@@ -18,7 +18,7 @@ let haToRa dateTime longitude ha =
     |> fun lst -> lst.TotalHours - ha
     |> fun ra -> if ra < 0.0 then ra + 24.0 else ra
 
-let equatorialToHorizon (eq : Coord2D) latitude =
+let equatorialToHorizontal (eq : Coord2D) latitude =
     let ha = fst eq * 15.0
     let dec = snd eq
 
@@ -32,3 +32,16 @@ let equatorialToHorizon (eq : Coord2D) latitude =
         if sinHa < 0.0 then az' else 360.0 - az'
 
     Coord2D(alt, az)
+
+let horizontalToEquatorial (hor : Coord2D) latitude =
+    let (alt, az) = hor
+    let sinDec = (sinD alt * sinD latitude) + (cosD alt * cosD latitude * cosD az)
+    let dec = asinD sinDec
+
+    let cosHa = (sinD alt - sinD latitude * sinDec) / (cosD latitude * cosD dec)
+    let ha' = acosD cosHa
+    let sinAz = sinD az
+    let ha =
+        if sinAz < 0.0 then ha' else 360.0 - ha'
+
+    Coord2D(ha / 15.0, dec)
