@@ -15,3 +15,8 @@ let ``Test haToRa`` (ha : float) (longitude : float) (year : int) (month : int) 
     let dateTime = (new DateTime(year, month, day)).AddHours(time)
     let result = haToRa dateTime longitude ha
     Assert.That(result, Is.EqualTo(ra).Within(1E-6))
+
+[<TestCase(5.862_222, 23.219_444, 52.0, 19.334_345, 283.271_027)>]
+let ``Test equatorialToHorizon`` (ha : float) (dec : float) (latitude : float) (alt : float) (az : float) =
+    let result = equatorialToHorizon (ha, dec) latitude
+    Assert.That(result, Is.EqualTo((alt, az)).Within(1E-5))
