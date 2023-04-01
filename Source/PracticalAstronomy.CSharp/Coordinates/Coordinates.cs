@@ -26,4 +26,8 @@ public class Coordinates
         => Coord2D.FromTuple(
             PracticalAstronomy.Coordinates.eclitpicToEquatorial(dateTime, ecliptic.X, ecliptic.Y));
 
+    public Coord2D EquatorialToEcliptic(Coord2D equatorial, DateTime dateTime)
+        => Coord2D.FromTuple(
+            PracticalAstronomy.Coordinates.equatorialToEcliptic(dateTime, equatorial.X, equatorial.Y));
+
 }

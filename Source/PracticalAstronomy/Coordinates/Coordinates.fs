@@ -65,3 +65,17 @@ let eclitpicToEquatorial dateTime (ecl : Coord2D) =
     let ra = ra' - (360.0 * ((ra' / 360.0) |> int |> float))
 
     Coord2D(ra / 15.0, dec)
+
+let equatorialToEcliptic dateTime (eq : Coord2D) =
+    let (ra, dec) = (fst eq * 15.0, snd eq)
+    let meanObl = meanObliquity dateTime
+
+    let sinLat = (sinD dec * cosD meanObl) - (cosD dec * sinD meanObl * sinD ra)
+    let lat = asinD sinLat
+
+    let y = (sinD ra * cosD meanObl) + (tanD dec * sinD meanObl)
+    let x = cosD ra
+    let lon' = atan2D y x
+    let lon = lon' - (360.0 * ((lon' / 360.0) |> int |> float))
+
+    Coord2D(lon, lat)

@@ -35,3 +35,8 @@ let ``Test meanObliquity`` (year : int) (month : int) (day : int) (meanObl : flo
 let ``Test eclipticToEquatorial`` (lon : float) (lat : float) (year : int) (month : int) (day : int) (ra : float) (dec : float) =
     let result = eclitpicToEquatorial (new DateTime(year, month, day)) (lon, lat)
     Assert.That(result, Is.EqualTo((ra, dec)).Within(1E-3))
+
+[<TestCase(9.581_4778, 19.535_003, 2009, 7, 6, 139.686_1027, 4.875_275_723)>]
+let ``Test equatorialToEcliptic`` (ra : float) (dec : float) (year : int) (month : int) (day : int) (lon : float) (lat : float) =
+    let result = equatorialToEcliptic (new DateTime(year, month, day)) (ra, dec)
+    Assert.That(result, Is.EqualTo((lon, lat)).Within(1E-5))
