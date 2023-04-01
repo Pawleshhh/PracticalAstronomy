@@ -45,3 +45,9 @@ let horizontalToEquatorial (hor : Coord2D) latitude =
         if sinAz < 0.0 then ha' else 360.0 - ha'
 
     Coord2D(ha / 15.0, dec)
+
+let meanObliquity dateTime =
+    dateTimeToJulianDate dateTime
+    |> fun jd -> (jd.jd - 2_451_545.0) / 36_525.0
+    |> fun t -> (46.815 * t + 0.0006 * t * t - 0.00181 * t * t * t) / 3600.0
+    |> (-) 23.439_292

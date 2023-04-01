@@ -25,3 +25,8 @@ let ``Test equatorialToHorizontal`` (ha : float) (dec : float) (latitude : float
 let ``Test horizontalToEquatorial`` (alt : float) (az : float) (latitude : float) (ha : float) (dec : float) =
     let result = horizontalToEquatorial (alt, az) latitude
     Assert.That(result, Is.EqualTo((ha, dec)).Within(1E-5))
+
+[<TestCase(2009, 7, 6, 23.438_055_31)>]
+let ``Test meanObliquity`` (year : int) (month : int) (day : int) (meanObl : float) = 
+    let result = meanObliquity (new DateTime(year, month, day))
+    Assert.That(result, Is.EqualTo(meanObl).Within(1E-8))

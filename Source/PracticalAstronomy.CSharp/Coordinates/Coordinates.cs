@@ -19,4 +19,7 @@ public class Coordinates
         => Coord2D.FromTuple(
             PracticalAstronomy.Coordinates.horizontalToEquatorial(horizontal.X, horizontal.Y, latitude));
 
+    public double MeanObliquity(DateTime dateTime)
+        => PracticalAstronomy.Coordinates.meanObliquity(dateTime);
+
 }
