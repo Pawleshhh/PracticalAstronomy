@@ -92,3 +92,16 @@ let equatorialToGalactic (eq : Coord2D) =
     let lon = lon' |> atan2DRemoveAmbiguity
 
     Coord2D(lon, lat)
+
+let galacticToEquatorial (gal : Coord2D) =
+    let (lon, lat) = gal
+
+    let sinDec = (cosD lat * cosD 27.4 * sinD (lon - 33.0)) + (sinD lat * sinD 27.4)
+    let dec = asinD sinDec
+
+    let y = cosD lat * cosD (lon - 33.0)
+    let x = (sinD lat * cosD 27.4) - (cosD lat * sinD 27.4 * sinD (lon - 33.0))
+    let ra' = atan2D y x |> (+) 192.25
+    let ra = ra' |> atan2DRemoveAmbiguity
+
+    Coord2D(ra / 15.0, dec)

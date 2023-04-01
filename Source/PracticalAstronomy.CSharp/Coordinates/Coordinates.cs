@@ -34,4 +34,8 @@ public class Coordinates
         => Coord2D.FromTuple(
             PracticalAstronomy.Coordinates.equatorialToGalactic(equatorial.X, equatorial.Y));
 
+    public Coord2D GalacticToEquatorial(Coord2D galactic)
+        => Coord2D.FromTuple(
+            PracticalAstronomy.Coordinates.galacticToEquatorial(galactic.X, galactic.Y));
+
 }
