@@ -18,7 +18,7 @@ let haToRa dateTime longitude ha =
     |> fun lst -> lst.TotalHours - ha
     |> fun ra -> if ra < 0.0 then ra + 24.0 else ra
 
-let equatorialToHorizontal (eq : Coord2D) latitude =
+let equatorialToHorizontal latitude (eq : Coord2D) =
     let ha = fst eq * 15.0
     let dec = snd eq
 
@@ -33,7 +33,7 @@ let equatorialToHorizontal (eq : Coord2D) latitude =
 
     Coord2D(alt, az)
 
-let horizontalToEquatorial (hor : Coord2D) latitude =
+let horizontalToEquatorial latitude (hor : Coord2D) =
     let (alt, az) = hor
     let sinDec = (sinD alt * sinD latitude) + (cosD alt * cosD latitude * cosD az)
     let dec = asinD sinDec
@@ -51,3 +51,17 @@ let meanObliquity dateTime =
     |> fun jd -> (jd.jd - 2_451_545.0) / 36_525.0
     |> fun t -> (46.815 * t + 0.0006 * t * t - 0.00181 * t * t * t) / 3600.0
     |> (-) 23.439_292
+
+let eclitpicToEquatorial dateTime (ecl : Coord2D) =
+    let (lon, lat) = ecl
+    let meanObl = meanObliquity dateTime
+
+    let sinDec = (sinD lat * cosD meanObl) + (cosD lat * sinD meanObl * sinD lon)
+    let dec = asinD sinDec
+
+    let y = (sinD lon * cosD meanObl) - (tanD lat * sinD meanObl)
+    let x = cosD lon
+    let ra' = atan2D y x
+    let ra = ra' - (360.0 * ((ra' / 360.0) |> int |> float))
+
+    Coord2D(ra / 15.0, dec)
