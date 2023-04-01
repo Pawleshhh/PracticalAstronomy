@@ -30,4 +30,8 @@ public class Coordinates
         => Coord2D.FromTuple(
             PracticalAstronomy.Coordinates.equatorialToEcliptic(dateTime, equatorial.X, equatorial.Y));
 
+    public Coord2D EquatorialToGalactic(Coord2D equatorial)
+        => Coord2D.FromTuple(
+            PracticalAstronomy.Coordinates.equatorialToGalactic(equatorial.X, equatorial.Y));
+
 }

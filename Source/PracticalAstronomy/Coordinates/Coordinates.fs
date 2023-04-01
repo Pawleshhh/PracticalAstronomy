@@ -62,7 +62,7 @@ let eclitpicToEquatorial dateTime (ecl : Coord2D) =
     let y = (sinD lon * cosD meanObl) - (tanD lat * sinD meanObl)
     let x = cosD lon
     let ra' = atan2D y x
-    let ra = ra' - (360.0 * ((ra' / 360.0) |> int |> float))
+    let ra = ra' |> atan2DRemoveAmbiguity
 
     Coord2D(ra / 15.0, dec)
 
@@ -76,6 +76,19 @@ let equatorialToEcliptic dateTime (eq : Coord2D) =
     let y = (sinD ra * cosD meanObl) + (tanD dec * sinD meanObl)
     let x = cosD ra
     let lon' = atan2D y x
-    let lon = lon' - (360.0 * ((lon' / 360.0) |> int |> float))
+    let lon = lon' |> atan2DRemoveAmbiguity
+
+    Coord2D(lon, lat)
+
+let equatorialToGalactic (eq : Coord2D) =
+    let (ra, dec) = (fst eq * 15.0, snd eq)
+
+    let sinLat = (cosD dec * cosD 27.4 * cosD (ra - 192.25)) + (sinD dec * sinD 27.4)
+    let lat = asinD sinLat
+
+    let y = sinD dec - (sinD lat * sinD 27.4)
+    let x = cosD dec * sinD (ra - 192.25) * cosD 27.4
+    let lon' = atan2D y x + 33.0
+    let lon = lon' |> atan2DRemoveAmbiguity
 
     Coord2D(lon, lat)

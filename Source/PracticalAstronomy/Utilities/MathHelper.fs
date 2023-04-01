@@ -45,3 +45,6 @@ let atanD x =
 
 let atan2D y x =
     atan2 y x |> radToDeg
+
+let atan2DRemoveAmbiguity x =
+    x - (360.0 * floor (x / 360.0))

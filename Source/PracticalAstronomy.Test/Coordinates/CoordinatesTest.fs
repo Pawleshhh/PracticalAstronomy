@@ -40,3 +40,8 @@ let ``Test eclipticToEquatorial`` (lon : float) (lat : float) (year : int) (mont
 let ``Test equatorialToEcliptic`` (ra : float) (dec : float) (year : int) (month : int) (day : int) (lon : float) (lat : float) =
     let result = equatorialToEcliptic (new DateTime(year, month, day)) (ra, dec)
     Assert.That(result, Is.EqualTo((lon, lat)).Within(1E-5))
+
+[<TestCase(10.35, 10.053_055_56, 232.247_8835, 51.122_2678)>]
+let ``Test equatorialToGalactic`` (ra : float) (dec : float) (lon : float) (lat : float) =
+    let result = equatorialToGalactic (ra, dec)
+    Assert.That(result, Is.EqualTo((lon, lat)).Within(1E-5))
