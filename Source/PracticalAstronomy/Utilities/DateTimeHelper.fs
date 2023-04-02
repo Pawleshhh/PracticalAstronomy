@@ -1,4 +1,4 @@
-﻿module PracticalAstronomy.DateTimeHelper
+﻿module internal PracticalAstronomy.DateTimeHelper
 
 open System
 

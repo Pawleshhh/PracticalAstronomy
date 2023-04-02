@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Compile Include="Utilities\MathHelper.fs" />
+    <Compile Include="Utilities\MatrixHelper.fs" />
     <Compile Include="Utilities\DateTimeHelper.fs" />
     <Compile Include="Time\TimeHelper.fs" />
     <Compile Include="Time\TimeDataTypes.fs" />
