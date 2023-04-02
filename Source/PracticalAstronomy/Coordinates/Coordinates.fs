@@ -18,14 +18,14 @@ let internal equatorialHourAngleMatrix (siderealTime : TimeSpan) =
               [   0.0  ;   0.0   ; 1.0] ]
 
 let internal eclipticToEquatorialMatrix mo =
-    array2D [ [ 1.0;   0.0   ;   0.0  ]
-              [ 0.0;  cosD mo; sinD mo] 
-              [ 0.0; -sinD mo; cosD mo] ]
-
-let internal equatorialToEclipticMatrix mo =
-    array2D [ [ 1.0;   0.0  ;    0.0  ]
+    array2D [ [ 1.0;   0.0  ;   0.0   ]
               [ 0.0; cosD mo; -sinD mo] 
               [ 0.0; sinD mo;  cosD mo] ]
+
+let internal equatorialToEclipticMatrix mo =
+    array2D [ [ 1.0;   0.0   ; 0.0  ]
+              [ 0.0;  cosD mo; sinD mo] 
+              [ 0.0; -sinD mo; cosD mo] ]
 
 let internal galacticToEquatorialMatrix =
     array2D [ [ -0.066_9887; -0.872_7558; -0.483_5389 ] 
@@ -39,26 +39,26 @@ let internal equatorialToGalacticMatrix =
 
 let rec internal convMatrices (conversion : CoordConversion) =
     match conversion with
-    | HaToEq st -> [ equatorialHourAngleMatrix st ]
-    | HaToHor lat -> [ horizontalHourAngleMatrix lat ]
-    | HaToEcl (st, mo) -> convMatrices (HaToEq(st)) @ convMatrices (EqToEcl(mo))
-    | HaToGal st -> convMatrices (HaToEq(st)) @ convMatrices (EqToGal)
-    | EqToHa st -> [ equatorialHourAngleMatrix st ]
-    | EqToHor (st, lat) -> convMatrices (EqToHa(st)) @ convMatrices (HaToHor(lat))
-    | EqToEcl mo -> [ equatorialToEclipticMatrix mo ]
-    | EqToGal -> [ equatorialToGalacticMatrix ]
-    | HorToHa lat -> [ horizontalHourAngleMatrix lat ]
-    | HorToEq (st, lat) -> convMatrices (HorToHa(lat)) @ convMatrices (HaToEq(st)) 
+    | HaToEq    st           -> [ equatorialHourAngleMatrix st ]
+    | HaToHor   lat          -> [ horizontalHourAngleMatrix lat ]
+    | HaToEcl  (st, mo)      -> convMatrices (HaToEq(st)) @ convMatrices (EqToEcl(mo))
+    | HaToGal   st           -> convMatrices (HaToEq(st)) @ convMatrices (EqToGal)
+    | EqToHa    st           -> [ equatorialHourAngleMatrix st ]
+    | EqToHor  (st, lat)     -> convMatrices (EqToHa(st)) @ convMatrices (HaToHor(lat))
+    | EqToEcl   mo           -> [ equatorialToEclipticMatrix mo ]
+    | EqToGal                -> [ equatorialToGalacticMatrix ]
+    | HorToHa   lat          -> [ horizontalHourAngleMatrix lat ]
+    | HorToEq  (st, lat)     -> convMatrices (HorToHa(lat)) @ convMatrices (HaToEq(st)) 
     | HorToEcl (st, lat, mo) -> convMatrices (HorToEq(st, lat)) @ convMatrices (EqToEcl(mo))
-    | HorToGal (st, lat) -> convMatrices (HorToEq(st, lat)) @ convMatrices (EqToGal)
-    | EclToEq mo -> [ eclipticToEquatorialMatrix mo ]
-    | EclToHa (mo, st) -> convMatrices (EclToEq(mo)) @ convMatrices (EqToHa(st))
+    | HorToGal (st, lat)     -> convMatrices (HorToEq(st, lat)) @ convMatrices (EqToGal)
+    | EclToEq   mo           -> [ eclipticToEquatorialMatrix mo ]
+    | EclToHa  (mo, st)      -> convMatrices (EclToEq(mo)) @ convMatrices (EqToHa(st))
     | EclToHor (mo, st, lat) -> convMatrices (EclToEq(mo)) @ convMatrices (EqToHor(st, lat))
-    | EclToGal mo -> convMatrices (EclToEq(mo)) @ convMatrices (EqToGal)
-    | GalToEq -> [ galacticToEquatorialMatrix ]
-    | GalToHa st -> convMatrices (GalToEq) @ convMatrices (EqToHa(st))
-    | GalToHor (st, lat) -> convMatrices (GalToEq) @ convMatrices (EqToHor(st, lat))
-    | GalToEcl mo -> convMatrices (GalToEq) @ convMatrices (EqToEcl(mo))
+    | EclToGal  mo           -> convMatrices (EclToEq(mo)) @ convMatrices (EqToGal)
+    | GalToEq                -> [ galacticToEquatorialMatrix ]
+    | GalToHa   st           -> convMatrices (GalToEq) @ convMatrices (EqToHa(st))
+    | GalToHor (st, lat)     -> convMatrices (GalToEq) @ convMatrices (EqToHor(st, lat))
+    | GalToEcl  mo           -> convMatrices (GalToEq) @ convMatrices (EqToEcl(mo))
 
 let internal columnCoordVector (coord : Coord2D) =
     let x, y = coord
@@ -66,7 +66,7 @@ let internal columnCoordVector (coord : Coord2D) =
               [ sinD x * cosD y ] 
               [      sinD y     ] ]
 
-let convert (conversion : CoordConversion) (from : Coord2D) =
+let generalisedTransformation (conversion : CoordConversion) (from : Coord2D) =
     let rec convertStep matrices coordVector =
         if List.isEmpty matrices then
             coordVector
@@ -76,7 +76,7 @@ let convert (conversion : CoordConversion) (from : Coord2D) =
             convertStep (List.tail matrices) newCoordVector
 
     let coordVector = convertStep (convMatrices conversion) (columnCoordVector from)
-    let m, n, p = (coordVector[0, 0], coordVector[0, 1], coordVector[0, 2])
+    let m, n, p = (coordVector[0, 0], coordVector[1, 0], coordVector[2, 0])
     let x = atan2D n m |> atan2DRemoveAmbiguity
     let y = asinD p
 

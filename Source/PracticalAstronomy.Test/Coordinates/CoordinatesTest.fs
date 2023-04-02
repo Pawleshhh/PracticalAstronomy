@@ -3,6 +3,12 @@
 open System
 open NUnit.Framework
 open PracticalAstronomy.Coordinates
+open PracticalAstronomy.CoordinateSystemTypes
+
+[<TestCase(97.638_119, -17.857_969, 23.446_236, 5.155_862, 52.175_278, 153.491_944, 40.399_444)>]
+let ``Test generalisedTransformation ecliptic to horizontal`` (lon: float) (lat: float) (mo: float) (st: float) (geoLat: float) (az: float) (alt: float) =
+    let result = generalisedTransformation (EclToHor(mo, TimeSpan.FromHours(st), geoLat)) (lon, lat)
+    Assert.That(result, Is.EqualTo((az, alt)).Within(1E-5))
 
 [<TestCase(18.539_167, -64.0, 1980, 4, 22, 18.614_353, 9.873_237)>]
 let ``Test raToHa`` (ra : float) (longitude : float) (year : int) (month : int) (day : int) (time : float) (ha : float) =
