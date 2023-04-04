@@ -6,53 +6,73 @@ open PracticalAstronomy.Coordinates
 open PracticalAstronomy.CoordinateSystemTypes
 
 [<TestCase(97.638_119, -17.857_969, 23.446_236, 5.155_862, 52.175_278, 153.491_944, 40.399_444)>]
-let ``Test generalisedTransformation ecliptic to horizontal`` (lon: float) (lat: float) (mo: float) (st: float) (geoLat: float) (az: float) (alt: float) =
+let ``generalisedTransformation EclToHor`` (lon: float) (lat: float) (mo: float) (st: float) (geoLat: float) (az: float) (alt: float) =
     let result = generalisedTransformation (EclToHor(mo, TimeSpan.FromHours(st), geoLat)) (lon, lat)
     Assert.That(result, Is.EqualTo((az, alt)).Within(1E-5))
 
+[<TestCase(147.558_5835, 42.124_235, 4.412_4043, 278.627_481)>]
+let ``generalisedTransformation HaToEq`` (ha: float) (dec: float) (st: float) (ra: float) =
+    let result = generalisedTransformation (HaToEq(TimeSpan.FromHours(st))) (ha, dec)
+    Assert.That(result, Is.EqualTo((ra, dec)).Within(1E-6))
+    
+[<TestCase(147.558_5835, 42.124_235, -64.0, 235.9807995, -61.3127810)>]
+let ``generalisedTransformation HaToHor`` (ha: float) (dec: float) (lat: float) (az: float) (alt: float) =
+    let result = generalisedTransformation (HaToHor(lat)) (ha, dec)
+    Assert.That(result, Is.EqualTo((az, alt)).Within(1E-6))
+
+[<TestCase(147.558_5835, 42.124_235, 4.412_4043, 23.439_2318, 285.325_7326, 65.105_1288)>] //Date: 2009/07/06
+let ``generalisedTransformation HaToEcl`` (ha: float) (dec: float) (st: float) (mo: float) (lon: float) (lat: float) =
+    let result = generalisedTransformation (HaToEcl(TimeSpan.FromHours(st), mo)) (ha, dec)
+    Assert.That(result, Is.EqualTo((lon, lat)).Within(1E-6))
+
+[<TestCase(147.558_5835, 42.124_235, 4.412_4043, 70.788_4839, 20.504_4140)>]
+let ``generalisedTransformation HaToGal`` (ha: float) (dec: float) (st: float) (lon: float) (lat: float) =
+    let result = generalisedTransformation (HaToGal(TimeSpan.FromHours(st))) (ha, dec)
+    Assert.That(result, Is.EqualTo((lon, lat)).Within(1E-5))
+
 [<TestCase(18.539_167, -64.0, 1980, 4, 22, 18.614_353, 9.873_237)>]
-let ``Test raToHa`` (ra : float) (longitude : float) (year : int) (month : int) (day : int) (time : float) (ha : float) =
+let raToHa (ra : float) (longitude : float) (year : int) (month : int) (day : int) (time : float) (ha : float) =
     let dateTime = (new DateTime(year, month, day)).AddHours(time)
     let result = raToHa dateTime longitude ra
     Assert.That(result, Is.EqualTo(ha).Within(1E-6))
 
 [<TestCase(9.873_239, -64.0, 1980, 4, 22, 18.614_353, 18.539_165)>]
-let ``Test haToRa`` (ha : float) (longitude : float) (year : int) (month : int) (day : int) (time : float) (ra : float) =
+let haToRa (ha : float) (longitude : float) (year : int) (month : int) (day : int) (time : float) (ra : float) =
     let dateTime = (new DateTime(year, month, day)).AddHours(time)
     let result = haToRa dateTime longitude ha
     Assert.That(result, Is.EqualTo(ra).Within(1E-6))
 
 [<TestCase(5.862_222, 23.219_444, 52.0, 19.334_345, 283.271_027)>]
-let ``Test equatorialToHorizontal`` (ha : float) (dec : float) (latitude : float) (alt : float) (az : float) =
+let equatorialToHorizontal (ha : float) (dec : float) (latitude : float) (alt : float) (az : float) =
     let result = equatorialToHorizontal latitude (ha, dec)
     Assert.That(result, Is.EqualTo((alt, az)).Within(1E-5))
 
 [<TestCase(19.334_344, 283.271_028, 52.0, 5.862_222, 23.219_444)>]
-let ``Test horizontalToEquatorial`` (alt : float) (az : float) (latitude : float) (ha : float) (dec : float) =
+let horizontalToEquatorial (alt : float) (az : float) (latitude : float) (ha : float) (dec : float) =
     let result = horizontalToEquatorial latitude (alt, az)
     Assert.That(result, Is.EqualTo((ha, dec)).Within(1E-5))
 
 [<TestCase(2009, 7, 6, 23.438_055_31)>]
-let ``Test meanObliquity`` (year : int) (month : int) (day : int) (meanObl : float) = 
+let meanObliquity (year : int) (month : int) (day : int) (meanObl : float) = 
     let result = meanObliquity (new DateTime(year, month, day))
     Assert.That(result, Is.EqualTo(meanObl).Within(1E-8))
 
 [<TestCase(139.686_1111, 4.875_277_778, 2009, 7, 6, 9.581_500_61, 19.535_699_24)>]
-let ``Test eclipticToEquatorial`` (lon : float) (lat : float) (year : int) (month : int) (day : int) (ra : float) (dec : float) =
+let eclipticToEquatorial (lon : float) (lat : float) (year : int) (month : int) (day : int) (ra : float) (dec : float) =
     let result = eclitpicToEquatorial (new DateTime(year, month, day)) (lon, lat)
     Assert.That(result, Is.EqualTo((ra, dec)).Within(1E-3))
 
 [<TestCase(9.581_4778, 19.535_003, 2009, 7, 6, 139.686_1027, 4.875_275_723)>]
-let ``Test equatorialToEcliptic`` (ra : float) (dec : float) (year : int) (month : int) (day : int) (lon : float) (lat : float) =
+let equatorialToEcliptic (ra : float) (dec : float) (year : int) (month : int) (day : int) (lon : float) (lat : float) =
     let result = equatorialToEcliptic (new DateTime(year, month, day)) (ra, dec)
     Assert.That(result, Is.EqualTo((lon, lat)).Within(1E-5))
 
 [<TestCase(10.35, 10.053_055_56, 232.247_8835, 51.122_2678)>]
-let ``Test equatorialToGalactic`` (ra : float) (dec : float) (lon : float) (lat : float) =
+let equatorialToGalactic (ra : float) (dec : float) (lon : float) (lat : float) =
     let result = equatorialToGalactic (ra, dec)
     Assert.That(result, Is.EqualTo((lon, lat)).Within(1E-5))
 
 [<TestCase(232.247_778, 51.122_222, 10.349_995, 10.053_087)>]
-let ``Test galacticToEquatorial`` (lon : float) (lat : float) (ra : float) (dec : float) =
+let galacticToEquatorial (lon : float) (lat : float) (ra : float) (dec : float) =
     let result = galacticToEquatorial (lon, lat)
     Assert.That(result, Is.EqualTo((ra, dec)).Within(1E-5))

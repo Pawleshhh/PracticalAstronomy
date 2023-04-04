@@ -7,9 +7,9 @@ open Time
 open CoordinateSystemTypes
 
 let internal horizontalHourAngleMatrix latitude =
-    array2D [ [ -sinD latitude; 0.0; cosD latitude]
-              [       0.0     ; -1 ;      0.0     ] 
-              [  cosD latitude; 0.0; sinD latitude] ]
+    array2D [ [ -sinD latitude; 0.0; cosD latitude ]
+              [       0.0     ; -1 ;      0.0      ] 
+              [  cosD latitude; 0.0; sinD latitude ] ]
 
 let internal equatorialHourAngleMatrix (siderealTime : TimeSpan) =
     let st = siderealTime.TotalHours * 15.0
@@ -23,16 +23,16 @@ let internal eclipticToEquatorialMatrix mo =
               [ 0.0; sinD mo;  cosD mo] ]
 
 let internal equatorialToEclipticMatrix mo =
-    array2D [ [ 1.0;   0.0   ; 0.0  ]
+    array2D [ [ 1.0;   0.0   ;   0.0  ]
               [ 0.0;  cosD mo; sinD mo] 
               [ 0.0; -sinD mo; cosD mo] ]
 
-let internal galacticToEquatorialMatrix =
+let internal equatorialToGalacticMatrix =
     array2D [ [ -0.066_9887; -0.872_7558; -0.483_5389 ] 
               [  0.492_7285; -0.450_3470;  0.744_5846 ] 
               [ -0.867_6008; -0.188_3746;  0.460_1998 ] ]
 
-let internal equatorialToGalacticMatrix =
+let internal galacticToEquatorialMatrix =
     array2D [ [ -0.066_9888;  0.492_7285; -0.867_6008 ] 
               [ -0.872_7557; -0.450_3469; -0.188_3746 ] 
               [ -0.483_5389;  0.744_5846;  0.460_1998 ] ]

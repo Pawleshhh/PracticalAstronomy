@@ -1,6 +1,6 @@
 ﻿module internal PracticalAstronomy.MatrixHelper
 
-let matrixMult (a: float[,]) (b: float[,]) =
+let inline matrixMult (a: _[,]) (b: _[,]) =
     let m = a.GetLength(0)
     let n = b.GetLength(1)
     let p = b.GetLength(0)
