@@ -109,10 +109,10 @@ let equatorialToHorizontal latitude (eq : Coord2D) =
     let az = 
         if sinHa < 0.0 then az' else 360.0 - az'
 
-    Coord2D(alt, az)
+    Coord2D(az, alt)
 
 let horizontalToEquatorial latitude (hor : Coord2D) =
-    let (alt, az) = hor
+    let (az, alt) = hor
     let sinDec = (sinD alt * sinD latitude) + (cosD alt * cosD latitude * cosD az)
     let dec = asinD sinDec
 
