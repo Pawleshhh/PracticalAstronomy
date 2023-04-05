@@ -86,18 +86,20 @@ let raToHa dateTime longitude ra =
     dateTime
     |> dateTimeToGst
     |> gstToLst longitude
-    |> fun lst -> lst.TotalHours - ra
+    |> fun lst -> lst.TotalHours - (ra / 15.0)
     |> fun h1 -> if h1 < 0.0 then h1 + 24.0 else h1
+    |> (*) 15.0
 
 let haToRa dateTime longitude ha =
     dateTime
     |> dateTimeToGst
     |> gstToLst longitude
-    |> fun lst -> lst.TotalHours - ha
+    |> fun lst -> lst.TotalHours - (ha / 15.0)
     |> fun ra -> if ra < 0.0 then ra + 24.0 else ra
+    |> (*) 15.0
 
 let equatorialToHorizontal latitude (eq : Coord2D) =
-    let ha = fst eq * 15.0
+    let ha = fst eq
     let dec = snd eq
 
     let sinAlt = (sinD dec * sinD latitude) + (cosD dec * cosD latitude * cosD ha)
@@ -122,7 +124,7 @@ let horizontalToEquatorial latitude (hor : Coord2D) =
     let ha =
         if sinAz < 0.0 then ha' else 360.0 - ha'
 
-    Coord2D(ha / 15.0, dec)
+    Coord2D(ha, dec)
 
 let meanObliquity dateTime =
     dateTimeToJulianDate dateTime
@@ -142,7 +144,7 @@ let eclitpicToEquatorial dateTime (ecl : Coord2D) =
     let ra' = atan2D y x
     let ra = ra' |> atan2DRemoveAmbiguity
 
-    Coord2D(ra / 15.0, dec)
+    Coord2D(ra, dec)
 
 let equatorialToEcliptic dateTime (eq : Coord2D) =
     let (ra, dec) = (fst eq * 15.0, snd eq)
@@ -159,7 +161,7 @@ let equatorialToEcliptic dateTime (eq : Coord2D) =
     Coord2D(lon, lat)
 
 let equatorialToGalactic (eq : Coord2D) =
-    let (ra, dec) = (fst eq * 15.0, snd eq)
+    let (ra, dec) = (fst eq, snd eq)
 
     let sinLat = (cosD dec * cosD 27.4 * cosD (ra - 192.25)) + (sinD dec * sinD 27.4)
     let lat = asinD sinLat
@@ -182,4 +184,4 @@ let galacticToEquatorial (gal : Coord2D) =
     let ra' = atan2D y x + 192.25
     let ra = ra' |> atan2DRemoveAmbiguity
 
-    Coord2D(ra / 15.0, dec)
+    Coord2D(ra, dec)
