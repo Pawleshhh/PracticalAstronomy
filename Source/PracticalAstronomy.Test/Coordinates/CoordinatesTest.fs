@@ -5,11 +5,6 @@ open NUnit.Framework
 open PracticalAstronomy.Coordinates
 open PracticalAstronomy.CoordinateSystemTypes
 
-//[<TestCase(97.638_119, -17.857_969, 23.446_236, 5.155_862, 52.175_278, 153.491_944, 40.399_444)>]
-//let ``generalisedTransformation EclToHor`` (lon: float) (lat: float) (mo: float) (st: float) (geoLat: float) (az: float) (alt: float) =
-//    let result = generalisedTransformation (EclToHor(mo, TimeSpan.FromHours(st), geoLat)) (lon, lat)
-//    Assert.That(result, Is.EqualTo((az, alt)).Within(1E-5))
-
 [<TestCase(147.558_5835, 42.124_235, 4.412_4043, 278.627_481)>]
 let ``generalisedTransformation HaToEq`` (ha: float) (dec: float) (st: float) (ra: float) =
     let result = generalisedTransformation (HaToEq(TimeSpan.FromHours(st))) (ha, dec)
