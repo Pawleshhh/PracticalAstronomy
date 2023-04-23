@@ -37,4 +37,7 @@ public class Coordinates
     public Coord2D GalacticToEquatorial(Coord2D galactic)
         => FCoordinates.galacticToEquatorial(galactic.X, galactic.Y).ToCoord2D();
 
+    public double CelestialAngle(Coord2D celestialObj1, Coord2D celestialObj2)
+        => FCoordinates.celestialAngle(celestialObj1.X, celestialObj1.Y, celestialObj2.X, celestialObj2.Y);
+
 }

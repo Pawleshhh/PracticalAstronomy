@@ -185,3 +185,10 @@ let galacticToEquatorial (gal : Coord2D) =
     let ra = ra' |> atan2DRemoveAmbiguity
 
     Coord2D(ra, dec)
+
+let celestialAngle (celestialObj1 : Coord2D) (celestialObj2 : Coord2D) =
+    let (x1, y1) = celestialObj1
+    let (x2, y2) = celestialObj2
+
+    (sinD y1 * sinD y2) + (cosD y1 * cosD y2 * cosD (x1 - x2))
+    |> acosD

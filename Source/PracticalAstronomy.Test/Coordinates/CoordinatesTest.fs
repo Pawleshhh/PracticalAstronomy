@@ -151,3 +151,8 @@ let equatorialToGalactic (ra : float) (dec : float) (lon : float) (lat : float) 
 let galacticToEquatorial (lon : float) (lat : float) (ra : float) (dec : float) =
     let result = galacticToEquatorial (lon, lat)
     Assert.That(result, Is.EqualTo((ra, dec)).Within(1E-5))
+
+[<TestCase(78.382_080, 101.055_840, -8.225_000, -16.686_389, 23.673_850)>]
+let celestialAngle (x1 : float) (x2 : float) (y1 : float) (y2 : float) (angle : float) = 
+    let result = celestialAngle (x1, y1) (x2, y2)
+    Assert.That(result, Is.EqualTo(angle).Within(1E-5))
