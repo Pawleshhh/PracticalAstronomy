@@ -192,3 +192,37 @@ let celestialAngle (celestialObj1 : Coord2D) (celestialObj2 : Coord2D) =
 
     (sinD y1 * sinD y2) + (cosD y1 * cosD y2 * cosD (x1 - x2))
     |> acosD
+
+let private cosHRisingAndSetting v lat dec =
+    -((sinD v + sinD lat * sinD dec) / (cosD lat * cosD dec))
+
+let neverRises v latitude declination =
+    if cosHRisingAndSetting v latitude declination > 1.0 then true else false
+
+let isCircumpolar v latitude declination =
+    if cosHRisingAndSetting v latitude declination < -1.0 then true else false
+
+let risingAndSetting (dateTime: DateTime) v (geo : Coord2D) (eq : Coord2D) =
+    let (ra, dec) = eq
+    let (lat, lon) = geo
+    let cosH = cosHRisingAndSetting v lat dec
+
+    if cosH < -1.0 || cosH > 1.0 then 
+        (None, None)
+    else
+        let h = acosD cosH / 15.0
+        let lstr = reduceToRange 0.0 24.0 (ra - h)
+        let lsts = reduceToRange 0.0 24.0 (ra + h)
+        let ar = 
+            acosD ((sinD dec + sinD v * sinD lat) / (cosD v * cosD lat))
+            |> reduceToRange 0.0 360.0
+        let as' = 360.0 - ar
+        
+        let lstToUt lst =
+            let gst = lstToGst lon (TimeSpan.FromHours(lst))
+            gstToUt (dateTime.Date.AddHours gst.TotalHours)
+
+        let utr = lstToUt lstr
+        let uts = lstToUt lsts
+
+        (Some((utr, ar)), Some((uts, as')))

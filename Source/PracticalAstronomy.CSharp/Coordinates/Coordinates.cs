@@ -40,4 +40,24 @@ public class Coordinates
     public double CelestialAngle(Coord2D celestialObj1, Coord2D celestialObj2)
         => FCoordinates.celestialAngle(celestialObj1.X, celestialObj1.Y, celestialObj2.X, celestialObj2.Y);
 
+    public bool NeverRises(double v, double latitude, double declination)
+        => FCoordinates.neverRises(v, latitude, declination);
+
+    public bool IsCircumpolar(double v, double latitude, double declination)
+        => FCoordinates.isCircumpolar(v, latitude, declination);
+
+    public ((TimeSpan Rising, double Azimuth), (TimeSpan Setting, double Azimuth))? RisingAndSetting(DateTime dateTime, double v, Coord2D geographical, Coord2D equatorial)
+    {
+        var result = FCoordinates.risingAndSetting(dateTime, v, geographical.X, geographical.Y, equatorial.X, equatorial.Y);
+        var rising = result.Item1.OptionToNullable();
+        var setting = result.Item2.OptionToNullable();
+
+        if (rising is null ||  setting is null)
+        {
+            return null;
+        }
+
+        return ((rising.Item1, rising.Item2), (setting.Item1, setting.Item2));
+    }
+
 }

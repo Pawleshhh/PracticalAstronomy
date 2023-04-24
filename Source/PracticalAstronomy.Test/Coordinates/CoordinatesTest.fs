@@ -156,3 +156,13 @@ let galacticToEquatorial (lon : float) (lat : float) (ra : float) (dec : float) 
 let celestialAngle (x1 : float) (x2 : float) (y1 : float) (y2 : float) (angle : float) = 
     let result = celestialAngle (x1, y1) (x2, y2)
     Assert.That(result, Is.EqualTo(angle).Within(1E-5))
+
+[<TestCase(2010, 8, 24, 30.0, 64.0, 23.655_558, 21.7, 0.5667, 14.271_6699, 64.362_348, 4.166_990_15, 295.637_652)>]
+let risingAndSetting (y: int) (m: int) (d: int) (lat: float) (lon: float) (ra: float) (dec: float) (v: float) (r: float) (ar: float) (s: float) (as': float) =
+    let result = risingAndSetting (new DateTime(y, m, d)) v (lat, lon) (ra, dec)
+
+    match result with
+    | (Some(r', ar'), Some(s', as'')) ->
+        Assert.That((r'.TotalHours, s'.TotalHours), Is.EqualTo(r, s).Within(1E-3))
+        Assert.That((ar', as''), Is.EqualTo(ar, as').Within(1E-3))
+    | _ -> Assert.Fail()
