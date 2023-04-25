@@ -46,7 +46,7 @@ public class Coordinates
     public bool IsCircumpolar(double v, double latitude, double declination)
         => FCoordinates.isCircumpolar(v, latitude, declination);
 
-    public ((TimeSpan Rising, double Azimuth), (TimeSpan Setting, double Azimuth))? RisingAndSetting(DateTime dateTime, double v, Coord2D geographical, Coord2D equatorial)
+    public RisingAndSetting? RisingAndSetting(DateTime dateTime, double v, Coord2D geographical, Coord2D equatorial)
     {
         var result = FCoordinates.risingAndSetting(dateTime, v, geographical.X, geographical.Y, equatorial.X, equatorial.Y);
         var rising = result.Item1.OptionToNullable();
@@ -57,7 +57,7 @@ public class Coordinates
             return null;
         }
 
-        return ((rising.Item1, rising.Item2), (setting.Item1, setting.Item2));
+        return new((rising.Item1, rising.Item2), (setting.Item1, setting.Item2));
     }
 
 }

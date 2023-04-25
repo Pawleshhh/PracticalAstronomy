@@ -94,3 +94,5 @@ public record GalToEcl(double MeanObliquity) : CoordConversion{
     internal override FConversion ToFSharp()
         => FConversion.NewGalToEcl(MeanObliquity);
 }
+
+public record RisingAndSetting((TimeSpan Time, double Azimuth) Rising, (TimeSpan Time, double Azimuth) Setting);
