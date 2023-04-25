@@ -2,8 +2,9 @@
 
 open System
 open NUnit.Framework
-open PracticalAstronomy.Coordinates
+open PracticalAstronomy
 open PracticalAstronomy.CoordinateSystemTypes
+open PracticalAstronomy.Coordinates
 
 [<TestCase(147.558_5835, 42.124_235, 4.412_4043, 278.627_481)>]
 let ``generalisedTransformation HaToEq`` (ha: float) (dec: float) (st: float) (ra: float) =
@@ -166,3 +167,14 @@ let risingAndSetting (y: int) (m: int) (d: int) (lat: float) (lon: float) (ra: f
         Assert.That((r'.TotalHours, s'.TotalHours), Is.EqualTo(r, s).Within(1E-3))
         Assert.That((ar', as''), Is.EqualTo(ar, as').Within(1E-3))
     | _ -> Assert.Fail()
+
+[<TestCase(2, 1979.5, 137.679_167, 14.390_278, 138.085_29, 14.268_842)>]
+let precessionLowPrecision (e: int) (y: float) (r: float) (d: float) (ra: float) (dec: float) =
+    let epoch =
+        match e with
+        | 1 -> Epochs.J1900 | 2 -> Epochs.J1950 
+        | 3 -> Epochs.J2000 | 4 -> Epochs.J2050
+        | _ -> failwith "Wrong index of an epoch"
+    
+    let result = precessionLowPrecision epoch y (r, d)
+    Assert.That(result, Is.EqualTo((ra, dec)).Within(1E-5))

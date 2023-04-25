@@ -226,3 +226,29 @@ let risingAndSetting (dateTime: DateTime) v (geo : Coord2D) (eq : Coord2D) =
         let uts = lstToUt lsts
 
         (Some((utr, ar)), Some((uts, as')))
+
+let internal epochPrecession epoch =
+    match epoch with
+    | J1900 -> { PrecessionalConstant.n = 3.072_34; m = 1.336_45; n' = 20.046_8 }
+    | J1950 -> { PrecessionalConstant.n = 3.073_27; m = 1.336_17; n' = 20.042_6 }
+    | J2000 -> { PrecessionalConstant.n = 3.074_20; m = 1.335_89; n' = 20.038_3 }
+    | J2050 -> { PrecessionalConstant.n = 3.075_13; m = 1.335_60; n' = 20.034_0 }
+
+let internal epochToYear epoch =
+    match epoch with
+    | J1900 -> 1900.0
+    | J1950 -> 1950.0
+    | J2000 -> 2000.0
+    | J2050 -> 2050.0
+
+let precessionLowPrecision epoch year (eq : Coord2D) =
+    let (ra, dec) = eq
+
+    let n = year - epochToYear epoch
+    let s1 = ((3.073_27 + 1.33617 * sinD ra * tanD dec) * n) / 3600.0 * 15.0
+    let raP = (s1 + ra)
+
+    let s2 = (20.0426 * cosD ra) * n / 3600.0
+    let decP = s2 + dec
+
+    Coord2D(raP, decP)

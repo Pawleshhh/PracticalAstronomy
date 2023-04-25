@@ -26,3 +26,9 @@ type CoordConversion =
 | GalToHa of siderealTime : TimeSpan
 | GalToHor of siderealTime : TimeSpan * latitude : float
 | GalToEcl of meanObliquity : float
+
+type PrecessionalConstant = {
+    m : float;
+    n : float;
+    n': float;
+}

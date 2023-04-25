@@ -60,4 +60,22 @@ public class Coordinates
         return new((rising.Item1, rising.Item2), (setting.Item1, setting.Item2));
     }
 
+    public Coord2D PrecessionLowPrecision(Epoch epoch, double year, Coord2D equatorial)
+    {
+        var (ra, dec) = equatorial;
+        var fshEpoch = EpochToFSharp(epoch);
+
+        return FCoordinates.precessionLowPrecision(fshEpoch, year, ra, dec).ToCoord2D();
+
+        static Epochs EpochToFSharp(Epoch epoch)
+            => epoch switch
+            {
+                Epoch.J1900 => Epochs.J1900,
+                Epoch.J1950 => Epochs.J1950,
+                Epoch.J2000 => Epochs.J2000,
+                Epoch.J2050 => Epochs.J2050,
+                _ => throw new InvalidOperationException($"Unrecognized epoch of {epoch}")
+            };
+    }
+
 }
