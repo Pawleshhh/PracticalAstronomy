@@ -168,13 +168,21 @@ let risingAndSetting (y: int) (m: int) (d: int) (lat: float) (lon: float) (ra: f
         Assert.That((ar', as''), Is.EqualTo(ar, as').Within(1E-3))
     | _ -> Assert.Fail()
 
-[<TestCase(2, 1979.5, 137.679_167, 14.390_278, 138.085_29, 14.268_842)>]
-let precessionLowPrecision (e: int) (y: float) (r: float) (d: float) (ra: float) (dec: float) =
-    let epoch =
-        match e with
+let private indexToEpoch e =
+    match e with
         | 1 -> Epochs.J1900 | 2 -> Epochs.J1950 
         | 3 -> Epochs.J2000 | 4 -> Epochs.J2050
         | _ -> failwith "Wrong index of an epoch"
-    
+
+[<TestCase(2, 1979.5, 137.679_167, 14.390_278, 138.085_29, 14.268_842)>]
+let precessionLowPrecision (e: int) (y: float) (r: float) (d: float) (ra: float) (dec: float) =
+    let epoch = indexToEpoch e
     let result = precessionLowPrecision epoch y (r, d)
     Assert.That(result, Is.EqualTo((ra, dec)).Within(1E-5))
+
+[<TestCase(2, 1979.5, 137.679_167, 14.390_278, 138.083_991, 14.268_792)>]
+let precessionRigorousMethod (e: int) (y: float) (r: float) (d: float) (ra: float) (dec: float) =
+    let epoch = indexToEpoch e
+    let result = precessionRigorousMethod epoch y (r, d)
+    Assert.That(result, Is.EqualTo((ra, dec)).Within(1E-2)) // The low threshold here is due to the fact that the function calculates epoch2 date time
+                                                            // more precise so the result differs from the book where date time is rounded to the month only

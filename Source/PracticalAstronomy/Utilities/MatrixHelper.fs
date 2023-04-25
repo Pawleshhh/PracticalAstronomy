@@ -8,3 +8,6 @@ let inline matrixMult (a: _[,]) (b: _[,]) =
     Array2D.init m n (fun i j ->
         Seq.init p (fun k -> a[i, k] * b[k, j])
         |> Seq.sum)
+
+let inline transpose3x3 (arr: _[,]) =
+    Array2D.init 3 3 (fun i j -> arr.[j, i])

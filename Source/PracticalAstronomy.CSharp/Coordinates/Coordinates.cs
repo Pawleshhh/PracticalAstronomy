@@ -52,7 +52,7 @@ public class Coordinates
         var rising = result.Item1.OptionToNullable();
         var setting = result.Item2.OptionToNullable();
 
-        if (rising is null ||  setting is null)
+        if (rising is null || setting is null)
         {
             return null;
         }
@@ -66,16 +66,24 @@ public class Coordinates
         var fshEpoch = EpochToFSharp(epoch);
 
         return FCoordinates.precessionLowPrecision(fshEpoch, year, ra, dec).ToCoord2D();
-
-        static Epochs EpochToFSharp(Epoch epoch)
-            => epoch switch
-            {
-                Epoch.J1900 => Epochs.J1900,
-                Epoch.J1950 => Epochs.J1950,
-                Epoch.J2000 => Epochs.J2000,
-                Epoch.J2050 => Epochs.J2050,
-                _ => throw new InvalidOperationException($"Unrecognized epoch of {epoch}")
-            };
     }
+
+    public Coord2D PrecessionRigorousMethod(Epoch epoch, double year, Coord2D equatorial)
+    {
+        var (ra, dec) = equatorial;
+        var fshEpoch = EpochToFSharp(epoch);
+
+        return FCoordinates.precessionRigorousMethod(fshEpoch, year, ra, dec).ToCoord2D();
+    }
+
+    private static Epochs EpochToFSharp(Epoch epoch)
+        => epoch switch
+        {
+            Epoch.J1900 => Epochs.J1900,
+            Epoch.J1950 => Epochs.J1950,
+            Epoch.J2000 => Epochs.J2000,
+            Epoch.J2050 => Epochs.J2050,
+            _ => throw new InvalidOperationException($"Unrecognized epoch of {epoch}")
+        };
 
 }

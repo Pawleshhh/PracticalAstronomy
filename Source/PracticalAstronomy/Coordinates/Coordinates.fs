@@ -236,15 +236,15 @@ let internal epochPrecession epoch =
 
 let internal epochToYear epoch =
     match epoch with
-    | J1900 -> 1900.0
-    | J1950 -> 1950.0
-    | J2000 -> 2000.0
-    | J2050 -> 2050.0
+    | J1900 -> 1900
+    | J1950 -> 1950
+    | J2000 -> 2000
+    | J2050 -> 2050
 
 let precessionLowPrecision epoch year (eq : Coord2D) =
     let (ra, dec) = eq
 
-    let n = year - epochToYear epoch
+    let n = year - (epochToYear epoch |> float)
     let s1 = ((3.073_27 + 1.33617 * sinD ra * tanD dec) * n) / 3600.0 * 15.0
     let raP = (s1 + ra)
 
@@ -252,3 +252,50 @@ let precessionLowPrecision epoch year (eq : Coord2D) =
     let decP = s2 + dec
 
     Coord2D(raP, decP)
+
+let private precessionMatrix zeta z theta =
+    let cx = cosD zeta
+    let sx = sinD zeta
+    let cz = cosD z
+    let sz = sinD z
+    let ct = cosD theta
+    let st = sinD theta
+
+    array2D [ [  cx * ct * cz - sx * sz;  cx * ct * sz + sx * cz;  cx * st ]
+              [ -sx * ct * cz - cx * sz; -sx * ct * sz + cx * cz; -sx * st ] 
+              [         -st * cz       ;         -st * sz       ;     ct   ] ]
+
+let precessionRigorousMethod epoch year (eq : Coord2D) =
+    
+    let findMatrix epochJd =
+        let t   = (epochJd.jd - 2_451_545.0) / 36_525.0
+        let t'2 = t ** 2
+        let t'3 = t ** 3
+        let zeta  = 0.640_6161 * t + 0.000_0839 * t'2 + 0.000_0050 * t'3
+        let z     = 0.640_6161 * t + 0.000_3041 * t'2 + 0.000_0051 * t'3
+        let theta = 0.556_7530 * t - 0.000_1185 * t'2 - 0.000_0116 * t'3
+        precessionMatrix zeta z theta
+
+    let (ra, dec) = eq
+    let epoch1 = epochToYear epoch
+    let epoch1Jd = dateTimeToJulianDate (new DateTime(epoch1, 1, 1))
+
+    let P' = findMatrix epoch1Jd
+    let v = array2D [ [ cosD ra * cosD dec ]
+                      [ sinD ra * cosD dec ]
+                      [      sinD dec      ] ]
+    let s = matrixMult P' v
+
+    let (yearInt, yearF) = intAndFrac year
+    let days = if DateTime.IsLeapYear(yearInt) then 366.0 * yearF else 365.0 * yearF
+    // In the book the date time for epoch 2 is rounded to the month but I decided to be more precise
+    let epoch2Jd = dateTimeToJulianDate ((new DateTime(yearInt, 1, 1)).AddDays(days))
+
+    let P = findMatrix epoch2Jd |> transpose3x3
+    let w = matrixMult P s
+
+    let m, n, p = (w[0, 0], w[1, 0], w[2, 0])
+    let ra' = atan2D n m |> atan2DRemoveAmbiguity
+    let dec' = asinD p
+
+    Coord2D(ra', dec')
