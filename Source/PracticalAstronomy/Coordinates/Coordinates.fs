@@ -339,3 +339,12 @@ let refraction temperature pressure (hor: Coord2D) =
     let alt' = alt + r
 
     Coord2D(az, alt')
+
+let geocentricParallax height geoLat =
+    let u = atanD (0.996_647 * tanD geoLat)
+    let h' = height / 6_378_140.0
+
+    let pSin = 0.996_647 * sinD u + h' * cosD geoLat
+    let pCos = cosD u + h' * cosD geoLat
+
+    (pSin, pCos)

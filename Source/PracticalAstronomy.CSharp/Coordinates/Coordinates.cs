@@ -91,6 +91,12 @@ public class Coordinates
         return FCoordinates.refraction(temperature, pressure, horizon.X, horizon.Y).ToCoord2D();
     }
 
+    public (double PSin, double PCos) GeocentricParallax(double height, double geographicLatitude)
+    {
+        var result = FCoordinates.geocentricParallax(height, geographicLatitude);
+        return (result.Item1,  result.Item2);
+    }
+
     private static Epochs EpochToFSharp(Epoch epoch)
         => epoch switch
         {

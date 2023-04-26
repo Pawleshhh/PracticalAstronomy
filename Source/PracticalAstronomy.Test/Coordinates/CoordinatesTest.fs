@@ -202,3 +202,8 @@ let refraction (t: float) (p: float) (az: float) (alt: float) (ealt: float) =
     let (raz, ralt) = refraction t p (az, alt)
     Assert.That(ralt, Is.EqualTo(ealt).Within(1E-05))
     Assert.That(raz, Is.EqualTo(az))
+
+[<TestCase(60.0, 50.0, 0.762_422, 0.644_060)>]
+let geocentricParallax (h: float) (lat: float) (pSin: float) (pCos: float) =
+    let result = geocentricParallax h lat
+    Assert.That(result, Is.EqualTo((pSin, pCos)).Within(1E-5))
