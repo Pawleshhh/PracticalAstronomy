@@ -191,3 +191,8 @@ let precessionRigorousMethod (e: int) (y: float) (r: float) (d: float) (ra: floa
 let nutation (y: int) (m: int) (d: int) (l: float) (o: float) =
     let result = nutation (new DateTime(y, m, d))
     Assert.That(result, Is.EqualTo((l, o)).Within(1E-5))
+
+[<TestCase(165.562_250, 352.619_472, -1.549, 352.625_126, -1.548_981)>]
+let abberration (sunLon: float) (lon: float) (lat: float) (elon: float) (elat: float) =
+    let result = abberration sunLon (lon, lat)
+    Assert.That(result, Is.EqualTo((elon, elat)).Within(1E-5))

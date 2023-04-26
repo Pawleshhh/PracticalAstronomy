@@ -317,3 +317,10 @@ let nutation dateTime =
     let obliquity = 9.2 * cosD moonNode + 0.5 * cosD (2.0 * l)
 
     Coord2D(longitude, obliquity)
+
+let abberration sunLon (ecl : Coord2D) =
+    let (lon, lat) = ecl
+    let deltaLon = (-20.5 * cosD(sunLon - lon) / cosD lat) / 3600.0
+    let deltaLat = (-20.5 * sinD(sunLon - lon) * sinD lat) / 3600.0
+
+    Coord2D(lon + deltaLon, lat + deltaLat)

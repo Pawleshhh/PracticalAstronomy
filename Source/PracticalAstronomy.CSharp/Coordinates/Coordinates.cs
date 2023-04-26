@@ -81,6 +81,11 @@ public class Coordinates
         return FCoordinates.nutation(dateTime).ToCoord2D();
     }
 
+    public Coord2D Abberration(double sunLongitude, Coord2D ecliptic)
+    {
+        return FCoordinates.abberration(sunLongitude, ecliptic.X, ecliptic.Y).ToCoord2D();
+    }
+
     private static Epochs EpochToFSharp(Epoch epoch)
         => epoch switch
         {
