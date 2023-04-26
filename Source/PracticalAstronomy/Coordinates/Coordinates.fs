@@ -324,3 +324,18 @@ let abberration sunLon (ecl : Coord2D) =
     let deltaLat = (-20.5 * sinD(sunLon - lon) * sinD lat) / 3600.0
 
     Coord2D(lon + deltaLon, lat + deltaLat)
+
+let refraction temperature pressure (hor: Coord2D) =
+    let (az, alt) = hor
+    let z = 90.0 - alt
+    
+    let r =
+        match alt with
+        | _ when alt > 15.0 -> 0.00452 * pressure * tanD z / (273.0 + temperature)
+        | _ -> 
+            (pressure * (0.1594 + 0.0196 * alt * 0.00002 * (alt ** 2))) / 
+            ((273.0 + temperature) + (1.0 + 0.505 * alt + 0.0845 * (alt ** 2)))
+
+    let alt' = alt + r
+
+    Coord2D(az, alt')

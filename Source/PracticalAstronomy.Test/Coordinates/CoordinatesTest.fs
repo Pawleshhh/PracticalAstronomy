@@ -196,3 +196,9 @@ let nutation (y: int) (m: int) (d: int) (l: float) (o: float) =
 let abberration (sunLon: float) (lon: float) (lat: float) (elon: float) (elat: float) =
     let result = abberration sunLon (lon, lat)
     Assert.That(result, Is.EqualTo((elon, elat)).Within(1E-5))
+
+[<TestCase(13.0, 1008.0, 283.271_027, 19.334_345, 19.379_748)>]
+let refraction (t: float) (p: float) (az: float) (alt: float) (ealt: float) =
+    let (raz, ralt) = refraction t p (az, alt)
+    Assert.That(ralt, Is.EqualTo(ealt).Within(1E-05))
+    Assert.That(raz, Is.EqualTo(az))

@@ -86,6 +86,11 @@ public class Coordinates
         return FCoordinates.abberration(sunLongitude, ecliptic.X, ecliptic.Y).ToCoord2D();
     }
 
+    public Coord2D Refraction(double temperature, double pressure, Coord2D horizon)
+    {
+        return FCoordinates.refraction(temperature, pressure, horizon.X, horizon.Y).ToCoord2D();
+    }
+
     private static Epochs EpochToFSharp(Epoch epoch)
         => epoch switch
         {
