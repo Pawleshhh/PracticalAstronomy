@@ -76,6 +76,11 @@ public class Coordinates
         return FCoordinates.precessionRigorousMethod(fshEpoch, year, ra, dec).ToCoord2D();
     }
 
+    public Coord2D Nutation(DateTime dateTime)
+    {
+        return FCoordinates.nutation(dateTime).ToCoord2D();
+    }
+
     private static Epochs EpochToFSharp(Epoch epoch)
         => epoch switch
         {

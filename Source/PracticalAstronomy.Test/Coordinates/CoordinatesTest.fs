@@ -186,3 +186,8 @@ let precessionRigorousMethod (e: int) (y: float) (r: float) (d: float) (ra: floa
     let result = precessionRigorousMethod epoch y (r, d)
     Assert.That(result, Is.EqualTo((ra, dec)).Within(1E-2)) // The low threshold here is due to the fact that the function calculates epoch2 date time
                                                             // more precise so the result differs from the book where date time is rounded to the month only
+
+[<TestCase(1988, 09, 01, 5.492910079, 9.24156161)>]                                                            
+let nutation (y: int) (m: int) (d: int) (l: float) (o: float) =
+    let result = nutation (new DateTime(y, m, d))
+    Assert.That(result, Is.EqualTo((l, o)).Within(1E-5))

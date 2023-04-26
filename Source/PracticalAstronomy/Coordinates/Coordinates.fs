@@ -299,3 +299,21 @@ let precessionRigorousMethod epoch year (eq : Coord2D) =
     let dec' = asinD p
 
     Coord2D(ra', dec')
+
+let nutation dateTime =
+    let jd = dateTimeToJulianDate dateTime
+    let t = (jd.jd - 2_415_020.0) / 36_525.0
+
+    let calculateCelestialPosition x y (op : float -> float -> float) =
+        op x (360.0 * (y - truncate y)) |> reduceToRange 0.0 360.0
+
+    let a = 100.002_136 * t
+    let l = calculateCelestialPosition 279.6967 a (+)
+
+    let b = 5.372_617 * t
+    let moonNode = calculateCelestialPosition 259.1833 b (-)
+
+    let longitude = -17.2 * sinD moonNode - 1.3 * sinD (2.0 * l)
+    let obliquity = 9.2 * cosD moonNode + 0.5 * cosD (2.0 * l)
+
+    Coord2D(longitude, obliquity)
