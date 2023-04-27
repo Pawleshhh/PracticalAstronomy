@@ -212,3 +212,8 @@ let geocentricParallax (h: float) (lat: float) (pSin: float) (pCos: float) =
 let parallaxCorrectionOfMoon (y: int) (m: int) (d: int) (hr: int) (mm: int) (height: float) (lat: float) (lon: float) (moonP: float) (ra: float) (dec: float) (era: float) (edec: float) =
     let result = parallaxCorrectionOfMoon (new DateTime(y, m, d, hr, mm, 0)) height (lat, lon) moonP (ra, dec)
     Assert.That(result, Is.EqualTo((era, edec)).Within(1E-5))
+
+[<TestCase(1979, 2, 26, 16, 45, 60.0, 50.0, -100.0, 0.9901, 339.183_33, -8.74, 339.184_185, -8.742_064)>]
+let parallaxCorrection (y: int) (m: int) (d: int) (hr: int) (mm: int) (height: float) (lat: float) (lon: float) (distance: float) (ra: float) (dec: float) (era: float) (edec: float) =
+    let result = parallaxCorrection (new DateTime(y, m, d, hr, mm, 0)) height (lat, lon) distance (ra, dec)
+    Assert.That(result, Is.EqualTo((era, edec)).Within(1E-5))

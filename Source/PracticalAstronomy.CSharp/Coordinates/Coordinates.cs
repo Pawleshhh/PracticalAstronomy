@@ -112,6 +112,21 @@ public class Coordinates
             equatorial.X, equatorial.Y).ToCoord2D();
     }
 
+    public Coord2D ParallaxCorrection(
+        DateTime dateTime,
+        double height,
+        Coord2D geographic,
+        double distance,
+        Coord2D equatorial)
+    {
+        return FCoordinates.parallaxCorrection(
+            dateTime,
+            height,
+            geographic.X, geographic.Y,
+            distance,
+            equatorial.X, equatorial.Y).ToCoord2D();
+    }
+
     private static Epochs EpochToFSharp(Epoch epoch)
         => epoch switch
         {
