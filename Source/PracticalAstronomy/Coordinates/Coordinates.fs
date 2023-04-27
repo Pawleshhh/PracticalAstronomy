@@ -348,3 +348,18 @@ let geocentricParallax height geoLat =
     let pCos = cosD u + h' * cosD geoLat
 
     (pSin, pCos)
+
+let parallaxCorrectionOfMoon dateTime height (geo : Coord2D) moonParallax (eq: Coord2D) =
+    let (lat, lon) = geo
+    let (ra, dec) = eq
+    let lst = dateTimeToGst dateTime |> gstToLst lon
+    let hourAngle = lst.TotalHours - (ra / 15.0)
+    let hourAngleD = hourAngle * 15.0
+    let (pSin, pCos) = geocentricParallax height lat
+    let r = (1.0 / sinD moonParallax)
+    let delta = atanD ((pCos * sinD hourAngleD) / (r * cosD dec - pCos * cosD hourAngleD))
+    let hourAngleD' = hourAngleD + delta
+    let ra' = ra - delta
+    let dec' = atanD (cosD hourAngleD' * (r * sinD dec - pSin) / (r * cosD dec * cosD hourAngleD - pCos))
+
+    Coord2D(ra', dec')

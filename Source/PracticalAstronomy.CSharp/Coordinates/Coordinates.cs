@@ -46,9 +46,9 @@ public class Coordinates
     public bool IsCircumpolar(double v, double latitude, double declination)
         => FCoordinates.isCircumpolar(v, latitude, declination);
 
-    public RisingAndSetting? RisingAndSetting(DateTime dateTime, double v, Coord2D geographical, Coord2D equatorial)
+    public RisingAndSetting? RisingAndSetting(DateTime dateTime, double v, Coord2D geographic, Coord2D equatorial)
     {
-        var result = FCoordinates.risingAndSetting(dateTime, v, geographical.X, geographical.Y, equatorial.X, equatorial.Y);
+        var result = FCoordinates.risingAndSetting(dateTime, v, geographic.X, geographic.Y, equatorial.X, equatorial.Y);
         var rising = result.Item1.OptionToNullable();
         var setting = result.Item2.OptionToNullable();
 
@@ -95,6 +95,21 @@ public class Coordinates
     {
         var result = FCoordinates.geocentricParallax(height, geographicLatitude);
         return (result.Item1,  result.Item2);
+    }
+
+    public Coord2D ParallaxCorrectionOfMoon(
+        DateTime dateTime, 
+        double height, 
+        Coord2D geographic, 
+        double moonParallax, 
+        Coord2D equatorial)
+    {
+        return FCoordinates.parallaxCorrectionOfMoon(
+            dateTime,
+            height,
+            geographic.X, geographic.Y,
+            moonParallax,
+            equatorial.X, equatorial.Y).ToCoord2D();
     }
 
     private static Epochs EpochToFSharp(Epoch epoch)

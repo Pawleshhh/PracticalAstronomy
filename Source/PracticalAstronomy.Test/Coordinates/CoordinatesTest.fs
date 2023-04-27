@@ -207,3 +207,8 @@ let refraction (t: float) (p: float) (az: float) (alt: float) (ealt: float) =
 let geocentricParallax (h: float) (lat: float) (pSin: float) (pCos: float) =
     let result = geocentricParallax h lat
     Assert.That(result, Is.EqualTo((pSin, pCos)).Within(1E-5))
+
+[<TestCase(1979, 2, 26, 16, 45, 60.0, 50.0, -100.0, 1.019_167, 338.829_165, -7.686_944, 339.180_075, -8.538_165)>]
+let parallaxCorrectionOfMoon (y: int) (m: int) (d: int) (hr: int) (mm: int) (height: float) (lat: float) (lon: float) (moonP: float) (ra: float) (dec: float) (era: float) (edec: float) =
+    let result = parallaxCorrectionOfMoon (new DateTime(y, m, d, hr, mm, 0)) height (lat, lon) moonP (ra, dec)
+    Assert.That(result, Is.EqualTo((era, edec)).Within(1E-5))
