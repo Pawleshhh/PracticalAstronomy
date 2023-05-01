@@ -384,7 +384,7 @@ let parallaxCorrection dateTime height (geo : Coord2D) distance (eq: Coord2D) =
 
     Coord2D(ra', dec')
     
-let internal heliographicCoordsParameters julianDate geocentricLongitude =
+let internal heliographicCoordsParameters julianDate =
     let t = (julianDate.jd - 2_415_020.0) / 36_525.0
     let delta = 84.0 * t / 60.0
     let ascendingNodeLongitude = 74.366_666 + delta
@@ -392,7 +392,7 @@ let internal heliographicCoordsParameters julianDate geocentricLongitude =
 
 let centreOfSolarDisc dateTime geocentricLongitude =
     let julianDate = dateTimeToJulianDate dateTime
-    let ascendingNodeLongitude, l = heliographicCoordsParameters julianDate geocentricLongitude
+    let ascendingNodeLongitude, l = heliographicCoordsParameters julianDate
     let y = sinD (ascendingNodeLongitude - geocentricLongitude) * cosD l
     let x = -cosD (ascendingNodeLongitude - geocentricLongitude)
     let a = atan2D y x
@@ -406,7 +406,7 @@ let centreOfSolarDisc dateTime geocentricLongitude =
 
 let positionAngleOfSunRotationAxis dateTime obliquityOfEcliptic geocentricLongitude =
     let julianDate = dateTimeToJulianDate dateTime
-    let ascendingNodeLongitude, l = heliographicCoordsParameters julianDate geocentricLongitude
+    let ascendingNodeLongitude, l = heliographicCoordsParameters julianDate
 
     let theta1 = atanD (-cosD geocentricLongitude * tanD obliquityOfEcliptic)
     let theta2 = atanD (-cosD (ascendingNodeLongitude - geocentricLongitude) * tanD l)
@@ -431,3 +431,35 @@ let carringtionRotationNumber dateTime =
     let julianDate = dateTimeToJulianDate dateTime
     1690.0 + ((julianDate.jd - 2_444_235.34) / 27.2753)
     |> round |> int
+
+let internal selenographicCoordsParameters julianDate =
+    let t = (julianDate.jd - 2_451_545.0) / 36_525.0
+    let ascendingNodeLongitude = 125.044_522 - 1934.136_261 * t |> reduceToRange 0.0 360.0
+    let f = 93.271_910 + 483_202.0175 * t |> reduceToRange 0.0 360.0
+    let i = 1.542_416_666_666_666_5
+    (ascendingNodeLongitude, f, i)
+
+let centreOfMoon dateTime (moonGeocentric: Coord2D) =
+    let (lambda, beta) = moonGeocentric
+    let julianDate = dateTimeToJulianDate dateTime
+    let ascendingNodeLongitude, f, i = selenographicCoordsParameters julianDate
+    let be = (-cosD i * sinD beta + sinD i * cosD beta * sinD (ascendingNodeLongitude - lambda)) |> asinD
+
+    let y = (-sinD beta * sinD i - cosD beta * cosD i * sinD (ascendingNodeLongitude - lambda))
+    let x = cosD beta * cosD (ascendingNodeLongitude - lambda)
+
+    let a = atan2D y x
+    let le = a - f |> reduceToRange -180.0 180.0
+
+    (le, be)
+
+let positionAngleOfMoonRotationAxis dateTime obliquity (moonGeocentric: Coord2D) =
+    let (lambda, beta) = moonGeocentric
+    let julianDate = dateTimeToJulianDate dateTime
+    let ascendingNodeLongitude, _, i = selenographicCoordsParameters julianDate
+
+    let c1 = atanD ((cosD (ascendingNodeLongitude - lambda) * sinD i) /
+        (cosD beta * cosD i + sinD beta * sinD i * sinD (ascendingNodeLongitude - lambda)))
+    let c2 = atanD ((sinD obliquity * cosD lambda) / (sinD obliquity * sinD beta * sinD lambda - cosD obliquity * cosD beta))
+
+    c1 + c2

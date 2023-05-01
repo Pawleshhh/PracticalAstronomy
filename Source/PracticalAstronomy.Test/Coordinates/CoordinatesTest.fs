@@ -237,3 +237,13 @@ let sunspotPositionToHeliographic (y: int) (m: int) (d: int) (o: float) (g: floa
 let carringtionRotationNumber (y: int) (m: int) (d: int) (n: int) =
     let result = carringtionRotationNumber (new DateTime(y, m, d))
     Assert.That(result, Is.EqualTo(n))
+
+[<TestCase(1988, 5, 1, 209.12, -3.08, -4.88, 4.04)>]
+let centreOfMoon (y: int) (m: int) (d: int) (lam: float) (bet: float) (le: float) (be: float) =
+    let result = centreOfMoon (new DateTime(y, m, d)) (lam, bet)
+    Assert.That(result, Is.EqualTo((le, be)).Within(1E-2))
+
+[<TestCase(1988, 5, 1, 23.4433, 209.12, -3.08, 19.78)>]
+let positionAngleOfMoonRotationAxis (y: int) (m: int) (d: int) (o: float) (lam: float) (bet: float) (c: float) =
+    let result = positionAngleOfMoonRotationAxis (new DateTime(y, m, d)) o (lam, bet)
+    Assert.That(result, Is.EqualTo(c).Within(1E-2))

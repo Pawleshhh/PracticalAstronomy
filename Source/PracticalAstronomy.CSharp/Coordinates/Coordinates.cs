@@ -147,6 +147,12 @@ public class Coordinates
     public int CarringtonRotationNumber(DateTime dateTime)
         => FCoordinates.carringtionRotationNumber(dateTime);
 
+    public Coord2D CentreOfMoon(DateTime dateTime, Coord2D moonGeocentric)
+        => FCoordinates.centreOfMoon(dateTime, moonGeocentric.X, moonGeocentric.Y).ToCoord2D();
+
+    public double PositionAngleOfMoonRotationAxis(DateTime dateTime, double obliquity, Coord2D moonGeocentric)
+        => FCoordinates.positionAngleOfMoonRotationAxis(dateTime, obliquity, moonGeocentric.X, moonGeocentric.Y);
+
     private static Epochs EpochToFSharp(Epoch epoch)
         => epoch switch
         {
