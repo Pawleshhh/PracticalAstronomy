@@ -217,3 +217,8 @@ let parallaxCorrectionOfMoon (y: int) (m: int) (d: int) (hr: int) (mm: int) (hei
 let parallaxCorrection (y: int) (m: int) (d: int) (hr: int) (mm: int) (height: float) (lat: float) (lon: float) (distance: float) (ra: float) (dec: float) (era: float) (edec: float) =
     let result = parallaxCorrection (new DateTime(y, m, d, hr, mm, 0)) height (lat, lon) distance (ra, dec)
     Assert.That(result, Is.EqualTo((era, edec)).Within(1E-5))
+
+[<TestCase(1988, 5, 1, 40.843_611, 103.47, -4.13)>]
+let centreOfSolarDisc (y: int) (m: int) (d: int) (l: float) (l0: float) (b0: float) =
+    let result = centreOfSolarDisc (new DateTime(y, m, d)) l
+    Assert.That(result, Is.EqualTo((l0, b0)).Within(1E-2))

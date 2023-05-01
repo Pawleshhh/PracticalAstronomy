@@ -127,6 +127,9 @@ public class Coordinates
             equatorial.X, equatorial.Y).ToCoord2D();
     }
 
+    public Coord2D CentreOfSolarDisc(DateTime dateTime, double geocentricLongitude)
+        => FCoordinates.centreOfSolarDisc(dateTime, geocentricLongitude).ToCoord2D();
+
     private static Epochs EpochToFSharp(Epoch epoch)
         => epoch switch
         {
