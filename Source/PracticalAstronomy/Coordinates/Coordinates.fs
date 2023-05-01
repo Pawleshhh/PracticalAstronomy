@@ -412,3 +412,17 @@ let positionAngleOfSunRotationAxis dateTime obliquityOfEcliptic geocentricLongit
     let theta2 = atanD (-cosD (ascendingNodeLongitude - geocentricLongitude) * tanD l)
 
     theta1 + theta2
+
+let sunspotPositionToHeliographic dateTime obliquityOfEcliptic geocentricLongitude angularRadius (position: Coord2D) =
+    let (theta, ro1) = position
+    let l0, b0 = centreOfSolarDisc dateTime geocentricLongitude
+    let p = positionAngleOfSunRotationAxis dateTime obliquityOfEcliptic geocentricLongitude
+
+    let s = asinD (ro1 / angularRadius)
+    let ro = s - (ro1 / 60.0)
+
+    let b = asinD (sinD b0 * cosD ro + cosD b0 * sinD ro * cosD (p - theta))
+    let a = asinD (sinD ro * sinD (p - theta) / cosD b)
+
+    let l = a + l0
+    (b, if l > 360.0 then l - 360.0 else l)

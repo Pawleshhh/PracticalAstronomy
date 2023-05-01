@@ -227,3 +227,8 @@ let centreOfSolarDisc (y: int) (m: int) (d: int) (l: float) (l0: float) (b0: flo
 let positionAngleOfSunRotationAxis (y: int) (m: int) (d: int) (o: float) (l: float) (p: float) =
     let result = positionAngleOfSunRotationAxis (new DateTime(y, m, d)) o l
     Assert.That(result, Is.EqualTo(p).Within(1E-5))
+    
+[<TestCase(1988, 5, 1, 23.442, 40.843_611, 15.867, 220.0, 10.5, -19.945, 142.611)>]
+let sunspotPositionToHeliographic (y: int) (m: int) (d: int) (o: float) (g: float) (a: float) (t: float) (r: float) (b: float) (l: float) =
+    let result = sunspotPositionToHeliographic (new DateTime(y, m, d)) o g a (t, r)
+    Assert.That(result, Is.EqualTo((b, l)).Within(1E-2))

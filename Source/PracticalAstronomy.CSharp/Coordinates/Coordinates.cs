@@ -130,8 +130,19 @@ public class Coordinates
     public Coord2D CentreOfSolarDisc(DateTime dateTime, double geocentricLongitude)
         => FCoordinates.centreOfSolarDisc(dateTime, geocentricLongitude).ToCoord2D();
 
-    public double PositionAngleOfSunRotationAxis(DateTime dateTime, double obliquityOfEcliptic, double geocentricLongitude)
-        => FCoordinates.positionAngleOfSunRotationAxis(dateTime, obliquityOfEcliptic, geocentricLongitude)
+    public double PositionAngleOfSunRotationAxis(
+        DateTime dateTime, 
+        double obliquityOfEcliptic, 
+        double geocentricLongitude)
+        => FCoordinates.positionAngleOfSunRotationAxis(dateTime, obliquityOfEcliptic, geocentricLongitude);
+
+    public Coord2D SunspotPositionToHeliographic(
+        DateTime dateTime, 
+        double obliquityOfEcliptic,
+        double geocentricLongitude,
+        double angularRadius, 
+        Coord2D position)
+        => FCoordinates.sunspotPositionToHeliographic(dateTime, obliquityOfEcliptic, geocentricLongitude, angularRadius, position.X, position.Y).ToCoord2D();
 
     private static Epochs EpochToFSharp(Epoch epoch)
         => epoch switch
