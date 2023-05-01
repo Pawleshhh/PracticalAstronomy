@@ -222,3 +222,8 @@ let parallaxCorrection (y: int) (m: int) (d: int) (hr: int) (mm: int) (height: f
 let centreOfSolarDisc (y: int) (m: int) (d: int) (l: float) (l0: float) (b0: float) =
     let result = centreOfSolarDisc (new DateTime(y, m, d)) l
     Assert.That(result, Is.EqualTo((l0, b0)).Within(1E-2))
+    
+[<TestCase(1988, 5, 1, 23.442, 40.843_611, -24.127_321)>]
+let positionAngleOfSunRotationAxis (y: int) (m: int) (d: int) (o: float) (l: float) (p: float) =
+    let result = positionAngleOfSunRotationAxis (new DateTime(y, m, d)) o l
+    Assert.That(result, Is.EqualTo(p).Within(1E-5))

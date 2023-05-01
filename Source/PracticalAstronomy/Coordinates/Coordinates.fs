@@ -383,14 +383,16 @@ let parallaxCorrection dateTime height (geo : Coord2D) distance (eq: Coord2D) =
     let dec' = dec - delta2
 
     Coord2D(ra', dec')
-
-let centreOfSolarDisc dateTime geocentricLongitude =
-    let julianDate = dateTimeToJulianDate dateTime
+    
+let internal heliographicCoordsParameters julianDate geocentricLongitude =
     let t = (julianDate.jd - 2_415_020.0) / 36_525.0
     let delta = 84.0 * t / 60.0
     let ascendingNodeLongitude = 74.366_666 + delta
-    
-    let l = 7.25
+    (ascendingNodeLongitude, 7.25)
+
+let centreOfSolarDisc dateTime geocentricLongitude =
+    let julianDate = dateTimeToJulianDate dateTime
+    let ascendingNodeLongitude, l = heliographicCoordsParameters julianDate geocentricLongitude
     let y = sinD (ascendingNodeLongitude - geocentricLongitude) * cosD l
     let x = -cosD (ascendingNodeLongitude - geocentricLongitude)
     let a = atan2D y x
@@ -401,3 +403,12 @@ let centreOfSolarDisc dateTime geocentricLongitude =
     let b0 = asinD (sinD (geocentricLongitude - ascendingNodeLongitude) * sinD l)
 
     Coord2D(l0, b0)
+
+let positionAngleOfSunRotationAxis dateTime obliquityOfEcliptic geocentricLongitude =
+    let julianDate = dateTimeToJulianDate dateTime
+    let ascendingNodeLongitude, l = heliographicCoordsParameters julianDate geocentricLongitude
+
+    let theta1 = atanD (-cosD geocentricLongitude * tanD obliquityOfEcliptic)
+    let theta2 = atanD (-cosD (ascendingNodeLongitude - geocentricLongitude) * tanD l)
+
+    theta1 + theta2
