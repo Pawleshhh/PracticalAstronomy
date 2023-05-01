@@ -232,3 +232,8 @@ let positionAngleOfSunRotationAxis (y: int) (m: int) (d: int) (o: float) (l: flo
 let sunspotPositionToHeliographic (y: int) (m: int) (d: int) (o: float) (g: float) (a: float) (t: float) (r: float) (b: float) (l: float) =
     let result = sunspotPositionToHeliographic (new DateTime(y, m, d)) o g a (t, r)
     Assert.That(result, Is.EqualTo((b, l)).Within(1E-2))
+
+[<TestCase(1975, 1, 27, 1624)>]
+let carringtionRotationNumber (y: int) (m: int) (d: int) (n: int) =
+    let result = carringtionRotationNumber (new DateTime(y, m, d))
+    Assert.That(result, Is.EqualTo(n))

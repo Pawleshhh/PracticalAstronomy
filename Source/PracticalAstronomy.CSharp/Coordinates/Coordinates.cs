@@ -144,6 +144,9 @@ public class Coordinates
         Coord2D position)
         => FCoordinates.sunspotPositionToHeliographic(dateTime, obliquityOfEcliptic, geocentricLongitude, angularRadius, position.X, position.Y).ToCoord2D();
 
+    public int CarringtonRotationNumber(DateTime dateTime)
+        => FCoordinates.carringtionRotationNumber(dateTime);
+
     private static Epochs EpochToFSharp(Epoch epoch)
         => epoch switch
         {

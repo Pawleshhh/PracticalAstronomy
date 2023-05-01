@@ -426,3 +426,8 @@ let sunspotPositionToHeliographic dateTime obliquityOfEcliptic geocentricLongitu
 
     let l = a + l0
     (b, if l > 360.0 then l - 360.0 else l)
+
+let carringtionRotationNumber dateTime =
+    let julianDate = dateTimeToJulianDate dateTime
+    1690.0 + ((julianDate.jd - 2_444_235.34) / 27.2753)
+    |> round |> int
