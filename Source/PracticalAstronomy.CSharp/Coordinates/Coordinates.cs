@@ -167,6 +167,9 @@ public class Coordinates
             moonHeliocentric.X,
             moonHeliocentric.Y).ToCoord3D();
 
+    public double AtmosphericExtinction(double zenithAngle)
+        => FCoordinates.atmosphericExtinction(zenithAngle);
+
     private static Epochs EpochToFSharp(Epoch epoch)
         => epoch switch
         {

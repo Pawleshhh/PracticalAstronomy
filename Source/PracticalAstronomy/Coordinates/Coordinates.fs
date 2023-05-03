@@ -471,3 +471,6 @@ let selenographicCoordsOfSun dateTime moonParallax sunEarthDist sunLongitude (mo
     let ls, bs = centreOfMoon dateTime (lm', b')
     let colong = 90.0 - ls |> reduceToRange 0.0 360.0
     (ls, colong, bs)
+
+let atmosphericExtinction zenithAngle =
+    0.2 / cosD zenithAngle

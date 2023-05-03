@@ -252,3 +252,8 @@ let positionAngleOfMoonRotationAxis (y: int) (m: int) (d: int) (o: float) (lam: 
 let selenographicCoordsOfSun (y: int) (m: int) (d: int) (mp: float) (dist: float) (sl: float) (lm: float) (b: float) (ls: float) (cl: float) (bs: float) =
     let result = selenographicCoordsOfSun (new DateTime(y, m, d)) mp dist sl (lm, b)
     Assert.That(result, Is.EqualTo((ls, cl, bs)).Within(1E-2))
+
+[<TestCase(75.0, 0.8)>]
+let atmosphericExtinction (z: float) (m: float) =
+    let result = atmosphericExtinction z
+    Assert.That(result, Is.EqualTo(m).Within(1E-1))
