@@ -247,3 +247,8 @@ let centreOfMoon (y: int) (m: int) (d: int) (lam: float) (bet: float) (le: float
 let positionAngleOfMoonRotationAxis (y: int) (m: int) (d: int) (o: float) (lam: float) (bet: float) (c: float) =
     let result = positionAngleOfMoonRotationAxis (new DateTime(y, m, d)) o (lam, bet)
     Assert.That(result, Is.EqualTo(c).Within(1E-2))
+
+[<TestCase(1988, 5, 1, 55.952, 1.0076, 40.8437, 209.12, -3.08, 6.811, 83.19, 1.19)>]
+let selenographicCoordsOfSun (y: int) (m: int) (d: int) (mp: float) (dist: float) (sl: float) (lm: float) (b: float) (ls: float) (cl: float) (bs: float) =
+    let result = selenographicCoordsOfSun (new DateTime(y, m, d)) mp dist sl (lm, b)
+    Assert.That(result, Is.EqualTo((ls, cl, bs)).Within(1E-2))

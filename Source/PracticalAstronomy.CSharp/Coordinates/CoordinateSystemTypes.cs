@@ -8,7 +8,11 @@ public record Coord2D(double X, double Y)
         => new Coord2D(tuple.Item1, tuple.Item2);
 }
 
-public record Coord3D(double X, double Y, double Z);
+public record Coord3D(double X, double Y, double Z)
+{
+    public static Coord3D FromTuple(Tuple<double, double, double> tuple)
+        => new Coord3D(tuple.Item1, tuple.Item2, tuple.Item3);
+}
 
 public abstract record CoordConversion{
     internal abstract FConversion ToFSharp();

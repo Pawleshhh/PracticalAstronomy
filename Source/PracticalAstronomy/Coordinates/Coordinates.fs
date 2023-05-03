@@ -463,3 +463,11 @@ let positionAngleOfMoonRotationAxis dateTime obliquity (moonGeocentric: Coord2D)
     let c2 = atanD ((sinD obliquity * cosD lambda) / (sinD obliquity * sinD beta * sinD lambda - cosD obliquity * cosD beta))
 
     c1 + c2
+
+let selenographicCoordsOfSun dateTime moonParallax sunEarthDist sunLongitude (moonHeliocentric: Coord2D) =
+    let lm, b = moonHeliocentric
+    let lm' = sunLongitude + 180.0 + (26.4 * cosD b * sinD (sunLongitude - lm) / moonParallax * sunEarthDist)
+    let b' = 0.14666 * b / moonParallax * sunEarthDist
+    let ls, bs = centreOfMoon dateTime (lm', b')
+    let colong = 90.0 - ls |> reduceToRange 0.0 360.0
+    (ls, colong, bs)

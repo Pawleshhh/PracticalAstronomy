@@ -153,6 +153,20 @@ public class Coordinates
     public double PositionAngleOfMoonRotationAxis(DateTime dateTime, double obliquity, Coord2D moonGeocentric)
         => FCoordinates.positionAngleOfMoonRotationAxis(dateTime, obliquity, moonGeocentric.X, moonGeocentric.Y);
 
+    public Coord3D SelenographicCoordsOfSun(
+        DateTime dateTime,
+        double moonParallax,
+        double sunEarthDistance,
+        double geocentricSunLongitude,
+        Coord2D moonHeliocentric)
+        => FCoordinates.selenographicCoordsOfSun(
+            dateTime,
+            moonParallax,
+            sunEarthDistance,
+            geocentricSunLongitude,
+            moonHeliocentric.X,
+            moonHeliocentric.Y).ToCoord3D();
+
     private static Epochs EpochToFSharp(Epoch epoch)
         => epoch switch
         {
