@@ -109,15 +109,17 @@ let ``generalisedTransformation GalToEcl`` galLon galLat mo lon lat =
     let result = generalisedTransformation (GalToEcl(mo)) (galLon, galLat)
     assertThat result (lon, lat) 1E-5
 
-[<TestCase(278.087_505, -64.0, 1980, 4, 22, 18.614_353, 148.098_555)>]
-[<TestCase(188.087_501, 15.0, 1980, 4, 22, 21.614_353, 2.221_770)>]
-[<TestCase(13.508334, 15.0, 2030, 9, 7, 21.614_3528, 312.712_491)>]
+[<TestCase(278.087_505, -64.0, 1980, 4, 22, 18.614_353 , 148.098_555)>]
+[<TestCase(188.087_501,  15.0, 1980, 4, 22, 21.614_353 ,   2.221_770)>]
+[<TestCase( 13.508_334,  15.0, 2030, 9,  7, 21.614_3528, 312.712_491)>]
 let raToHa ra longitude year month day time ha =
     let dateTime = (new DateTime(year, month, day)).AddHours(time)
     let result = raToHa dateTime longitude ra
     assertThat result ha 1E-5
 
-[<TestCase(148.098585, -64.0, 1980, 4, 22, 18.614_353, 278.087475)>]
+[<TestCase(148.098_585 , -64.0, 1980, 4, 22, 18.614_353 , 278.087_475 )>]
+[<TestCase(137.848_584 ,  27.0, 1999, 4, 22,  4.614_3528, 168.169_5765)>]
+[<TestCase(358.848_5835,  27.0, 2066, 1,  2,  3.997_6861, 190.235_5485)>]
 let haToRa ha longitude year month day time ra =
     let dateTime = (new DateTime(year, month, day)).AddHours(time)
     let result = haToRa dateTime longitude ha
