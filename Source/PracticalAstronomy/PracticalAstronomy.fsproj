@@ -6,10 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Utilities\Units.fs" />
     <Compile Include="Utilities\MathHelper.fs" />
     <Compile Include="Time\TimeHelper.fs" />
     <Compile Include="Time\TimeDataTypes.fs" />
     <Compile Include="Time\Time.fs" />
+    <Compile Include="Coordinates\CoordinateDataTypes.fs" />
   </ItemGroup>
 
 </Project>
