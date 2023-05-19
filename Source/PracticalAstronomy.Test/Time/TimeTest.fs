@@ -7,11 +7,20 @@ open PracticalAstronomy.Time
 let private timeToHours t =
     TimeSpan.FromDays(t).TotalHours
 
+let private createDateTime y m d t =
+    (new DateTime(y, m, d)).AddHours(timeToHours t)
+
+let private hmsToTimeSpan h m s mil =
+    new TimeSpan(0, h, m, s, mil)
+
+let private ymdhmsToDateTime y m d h mm s (mil: int) =
+    new DateTime(y, m, d, h, mm, s, mil)
+
 [<TestCase(2009,  6, 19, 0.75, 2_455_002.25)>]
 [<TestCase(2035,  2,  1, 0.33, 2_464_359.83)>]
 [<TestCase(1582, 10, 14, 0.90, 2_299_170.40)>]
 let ``Test dateTimeToJulianDate`` y m d t expectedJd =
-    let dateTime = (new DateTime(y, m, d)).AddHours(timeToHours t)
+    let dateTime = createDateTime y m d t
 
     let result = dateTimeToJulianDate dateTime
 
@@ -23,13 +32,15 @@ let ``Test dateTimeToJulianDate`` y m d t expectedJd =
 let ``Test julianDateToDateTime`` jd y m d t =
     let result = julianDateToDateTime ({ jd = jd })
 
-    let expectedDateTime = (new DateTime(y, m, d)).AddHours(timeToHours t)
+    let expectedDateTime = createDateTime y m d t
     Assert.That(result.Date, Is.EqualTo(expectedDateTime.Date))
     Assert.That(result.TimeOfDay.TotalHours, Is.EqualTo(expectedDateTime.TimeOfDay.TotalHours).Within(1E-2))
 
-[<TestCase(1980, 4, 22, 14, 36, 51, 670, 4.668_120)>]
-let ``Test dateTimeToGst`` (y : int) (m : int) (d : int) (h : int) (min : int) (s : int) (mil : int) (gst : float) =
-    let result = dateTimeToGst (new DateTime(y, m, d, h, min, s, mil))
+[<TestCase(1980,  4, 22, 14, 36, 51, 670,  4.668_120)>]
+[<TestCase(2033, 12, 31,  0,  0, 58, 999,  6.665_555)>]
+[<TestCase(1912,  6,  3, 17, 32,  1,   0, 10.320_293)>]
+let ``Test dateTimeToGst`` y m d h min s mil gst =
+    let result = dateTimeToGst (ymdhmsToDateTime y m d h min s mil)
     Assert.That(result.TotalHours, Is.EqualTo(gst).Within(1E-6))
 
 [<TestCase(1980, 4, 22, 4, 40, 5, 230, 14.614_353)>]
