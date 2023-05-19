@@ -4,9 +4,17 @@ open System
 open NUnit.Framework
 open PracticalAstronomy.Time
 
-[<TestCase(2009, 6, 19, 18, 2_455_002.25)>]
-let ``Test dateTimeToJulianDate`` (y : int) (m : int) (d : int) (h : int) (expectedJd : float) =
-    let result = dateTimeToJulianDate (new DateTime(y, m, d, h, 0, 0))
+let private timeToHours t =
+    TimeSpan.FromDays(t).TotalHours
+
+[<TestCase(2009,  6, 19, 0.75, 2_455_002.25)>]
+[<TestCase(2035,  2,  1, 0.33, 2_464_359.83)>]
+[<TestCase(1582, 10, 14, 0.90, 2_299_170.40)>]
+let ``Test dateTimeToJulianDate`` y m d t expectedJd =
+    let dateTime = (new DateTime(y, m, d)).AddHours(timeToHours t)
+
+    let result = dateTimeToJulianDate dateTime
+
     Assert.That(result.jd, Is.EqualTo(expectedJd))
 
 [<TestCase(2_455_002.25, 2009, 6, 19, 18)>]

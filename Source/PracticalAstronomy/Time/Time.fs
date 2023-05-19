@@ -11,7 +11,7 @@ let dateTimeToJulianDate (dateTime : DateTime) =
 
     let y', m' =
         match m with
-        | v when v = 1 || v = 2 -> (y - 1, m + 12)
+        | v when v < 3 -> (y - 1, m + 12)
         | _ -> (y, m)
 
     let B = 
