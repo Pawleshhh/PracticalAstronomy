@@ -17,10 +17,15 @@ let ``Test dateTimeToJulianDate`` y m d t expectedJd =
 
     Assert.That(result.jd, Is.EqualTo(expectedJd))
 
-[<TestCase(2_455_002.25, 2009, 6, 19, 18)>]
-let ``Test julianDateToDateTime`` (jd : float) (ey : int) (em : int) (ed : int) (eh : int)  =
+[<TestCase(2_455_002.25, 2009,  6, 19, 0.75)>]
+[<TestCase(2_464_359.83, 2035,  2,  1, 0.33)>]
+[<TestCase(2_299_170.40, 1582, 10, 24, 0.90)>]
+let ``Test julianDateToDateTime`` jd y m d t =
     let result = julianDateToDateTime ({ jd = jd })
-    Assert.That(result, Is.EqualTo(new DateTime(ey, em, ed, eh, 0, 0)))
+
+    let expectedDateTime = (new DateTime(y, m, d)).AddHours(timeToHours t)
+    Assert.That(result.Date, Is.EqualTo(expectedDateTime.Date))
+    Assert.That(result.TimeOfDay.TotalHours, Is.EqualTo(expectedDateTime.TimeOfDay.TotalHours).Within(1E-2))
 
 [<TestCase(1980, 4, 22, 14, 36, 51, 670, 4.668_120)>]
 let ``Test dateTimeToGst`` (y : int) (m : int) (d : int) (h : int) (min : int) (s : int) (mil : int) (gst : float) =
