@@ -11,12 +11,12 @@ let dateTimeToJulianDate (dateTime : DateTime) =
 
     let y', m' =
         match m with
-        | v when v < 3 -> (y - 1, m + 12)
+        | m when m < 3 -> (y - 1, m + 12)
         | _ -> (y, m)
 
     let B = 
         (match dateTime with
-        | d when d > gregorianCalendarStart ->
+        | dt when dt > gregorianCalendarStart ->
             let a = ((y' |> float) / 100.0) |> truncate
             2.0 - a + ((a / 4.0) |> truncate)
         | _ -> 0) |> float
@@ -28,10 +28,10 @@ let dateTimeToJulianDate (dateTime : DateTime) =
 
     let D = (30.6001 * ((m' + 1) |> float)) |> truncate
 
-    { JulianDate.jd = B + C + D + d + 1_720_994.5 }
+    { JulianDate.julianDate = B + C + D + d + 1_720_994.5 }
 
 let julianDateToDateTime (julianDate : JulianDate) =
-    let jd = julianDate.jd + 0.5
+    let jd = julianDate.julianDate + 0.5
     let I, F = intAndFrac jd
 
     let B =
@@ -65,7 +65,7 @@ let julianDateToDateTime (julianDate : JulianDate) =
 let dateTimeToGst (dateTime : DateTime) =
     let jd = dateTimeToJulianDate dateTime.Date
 
-    let S = jd.jd - 2_451_545.0
+    let S = jd.julianDate - 2_451_545.0
     let T = S / 36_525.0
     let T0 = 
         (6.697_374_558 + (2_400.051_336 * T) + (0.000_025_862 * T * T))
@@ -79,7 +79,7 @@ let dateTimeToGst (dateTime : DateTime) =
 let gstToUt (gst : DateTime) =
     let jd = dateTimeToJulianDate gst.Date
 
-    let S = jd.jd - 2_451_545.0
+    let S = jd.julianDate - 2_451_545.0
     let T = S / 36_525.0
     let T0 = 
         (6.697_374_558 + (2_400.051_336 * T) + (0.000_025_862 * T * T))

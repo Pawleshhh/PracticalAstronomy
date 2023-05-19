@@ -24,13 +24,13 @@ let ``Test dateTimeToJulianDate`` y m d t expectedJd =
 
     let result = dateTimeToJulianDate dateTime
 
-    Assert.That(result.jd, Is.EqualTo(expectedJd))
+    Assert.That(result.julianDate, Is.EqualTo(expectedJd))
 
 [<TestCase(2_455_002.25, 2009,  6, 19, 0.75)>]
 [<TestCase(2_464_359.83, 2035,  2,  1, 0.33)>]
 [<TestCase(2_299_170.40, 1582, 10, 24, 0.90)>]
 let ``Test julianDateToDateTime`` jd y m d t =
-    let result = julianDateToDateTime ({ jd = jd })
+    let result = julianDateToDateTime ({ julianDate = jd })
 
     let expectedDateTime = createDateTime y m d t
     Assert.That(result.Date, Is.EqualTo(expectedDateTime.Date))
