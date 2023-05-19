@@ -43,9 +43,11 @@ let ``Test dateTimeToGst`` y m d h min s mil gst =
     let result = dateTimeToGst (ymdhmsToDateTime y m d h min s mil)
     Assert.That(result.TotalHours, Is.EqualTo(gst).Within(1E-6))
 
-[<TestCase(1980, 4, 22, 4, 40, 5, 230, 14.614_353)>]
-let ``Test gstToUt`` (y : int) (m : int) (d : int) (h : int) (min : int) (s : int) (mil : int) (ut : float) =
-    let result = gstToUt (new DateTime(y, m, d, h, min, s, mil))
+[<TestCase(1980,  4, 22,  4, 40,  5, 232, 14.614_353)>]
+[<TestCase(2033, 12, 31,  6, 39, 55, 998,  0.016_388)>]
+[<TestCase(1912,  6,  3, 10, 19, 13,  55, 17.533_611)>]
+let ``Test gstToUt`` y m d h min s mil ut =
+    let result = gstToUt (ymdhmsToDateTime y m d h min s mil)
     Assert.That(result.TotalHours, Is.EqualTo(ut).Within(1E-6))
 
 [<TestCase(-64.0, 4, 40, 5, 230, 0.401_453)>]
