@@ -56,8 +56,10 @@ let ``Test gstToUt`` y m d h min s mil ut =
 let ``Test gstToLst`` longitude h m d mil lst =
     let result = gstToLst longitude (hmsToTimeSpan h m d mil)
     Assert.That(result.TotalHours, Is.EqualTo(lst).Within(1E-6))
-
-[<TestCase(-64.0, 0, 24, 5, 230, 4.668_119)>]
-let ``Test lstToGst`` (longitude : float) (h : int) (m : int) (d : int) (mil : int) (lst : float) =
+    
+[<TestCase( -64.0,  0, 24,  5, 231,  4.668_119)>]
+[<TestCase(  13.0,  0, 51, 59, 998, 23.999_999)>]
+[<TestCase(-179.0,  5,  7, 53,   0, 17.064_722)>]
+let ``Test lstToGst`` longitude h m d mil lst =
     let result = lstToGst longitude (hmsToTimeSpan h m d mil)
     Assert.That(result.TotalHours, Is.EqualTo(lst).Within(1E-6))
