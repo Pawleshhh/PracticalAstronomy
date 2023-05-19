@@ -7,6 +7,6 @@ public readonly record struct JulianDate(double Date)
         => PracticalAstronomy.Time.julianDateToDateTime(new(Date));
 
     public static JulianDate FromDateTime(DateTime dateTime)
-        => new(PracticalAstronomy.Time.dateTimeToJulianDate(dateTime).jd);
+        => new(PracticalAstronomy.Time.dateTimeToJulianDate(dateTime).julianDate);
 
 }
