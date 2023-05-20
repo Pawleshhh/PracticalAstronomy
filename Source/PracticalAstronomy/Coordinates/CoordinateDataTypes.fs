@@ -11,3 +11,8 @@ type EquatorialRightAscension = {
     rightAscension: float<deg>;
     declination: float<deg>
 }
+
+type Horizon = {
+    azimuth: float<deg>;
+    altitude: float<deg>
+}
