@@ -1,12 +1,11 @@
 ﻿module PracticalAstronomy.CoordinateSystems
 
-open System
 open PracticalAstronomy.Units
 open PracticalAstronomy.MathHelper
 open PracticalAstronomy.Time
 open PracticalAstronomy.CoordinateDataTypes
 
-let raToHa (dateTime: DateTime) (longitude: float<deg>) (ra: float<deg>) =
+let raToHa dateTime longitude ra =
     dateTime
     |> dateTimeToGst
     |> gstToLst longitude
@@ -14,7 +13,7 @@ let raToHa (dateTime: DateTime) (longitude: float<deg>) (ra: float<deg>) =
     |> fun h1 -> if h1 < 0.0 then h1 + 24.0 else h1
     |> (*) 15.0<deg>
 
-let haToRa (dateTime: DateTime) (longitude: float<deg>) (ha: float<deg>) =
+let haToRa dateTime longitude ha =
     dateTime
     |> dateTimeToGst
     |> gstToLst longitude
@@ -22,7 +21,7 @@ let haToRa (dateTime: DateTime) (longitude: float<deg>) (ha: float<deg>) =
     |> fun ra -> if ra < 0.0 then ra + 24.0 else ra
     |> (*) 15.0<deg>
 
-let eqToHor latitude (eq : EquatorialHourAngle) =
+let eqToHor latitude eq =
     let ha, dec = eq.hourAngle, eq.declination
 
     let sinAlt = (sinD dec * sinD latitude) + (cosD dec * cosD latitude * cosD ha)
