@@ -24,3 +24,10 @@ let haToRa y m d t lon ha ra =
 let eqToHor latitude ha dec az alt =
     let result = eqToHor latitude { hourAngle = ha; declination = dec }
     Assert.That((result.azimuth, result.altitude), Is.EqualTo((az, alt)).Within(1E-5))
+
+[<TestCase( 52.0, 283.271_027,  19.334_345,  87.93333, 23.219_444)>]
+[<TestCase(-88.0, 345.100_442,  -9.604_051,  14.99583, 11.536_388)>]
+[<TestCase(  3.0,  12.684_684,  23.559_398, 330.26250, 66.059_444)>]
+let horToEq latitude az alt ha dec =
+    let result = horToEq latitude { azimuth = az; altitude = alt }
+    Assert.That((result.hourAngle, result.declination), Is.EqualTo((ha, dec)).Within(1E-5))

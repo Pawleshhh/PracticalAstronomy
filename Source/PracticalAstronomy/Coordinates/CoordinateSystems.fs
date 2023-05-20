@@ -34,3 +34,17 @@ let eqToHor latitude eq =
         if sinHa < 0.0 then az' else 360.0<deg> - az'
 
     { azimuth = az; altitude = alt }
+
+let horToEq latitude hor =
+    let az, alt = hor.azimuth, hor.altitude
+
+    let sinDec = (sinD alt * sinD latitude) + (cosD alt * cosD latitude * cosD az)
+    let dec = asinD sinDec
+
+    let cosHa = (sinD alt - sinD latitude * sinDec) / (cosD latitude * cosD dec)
+    let ha' = acosD cosHa
+    let sinAz = sinD az
+    let ha =
+        if sinAz < 0.0 then ha' else 360.0<deg> - ha'
+
+    { hourAngle = ha; declination = dec }
