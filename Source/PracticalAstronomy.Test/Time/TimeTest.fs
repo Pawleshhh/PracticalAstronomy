@@ -1,20 +1,8 @@
 ﻿module PracticalAstronomy.Test.TimeTest
 
-open System
 open NUnit.Framework
 open PracticalAstronomy.Time
-
-let private timeToHours t =
-    TimeSpan.FromDays(t).TotalHours
-
-let private createDateTime y m d t =
-    (new DateTime(y, m, d)).AddHours(timeToHours t)
-
-let private hmsToTimeSpan h m s mil =
-    new TimeSpan(0, h, m, s, mil)
-
-let private ymdhmsToDateTime y m d h mm s (mil: int) =
-    new DateTime(y, m, d, h, mm, s, mil)
+open PracticalAstronomy.Test.TestUtils
 
 [<TestCase(2009,  6, 19, 0.75, 2_455_002.25)>]
 [<TestCase(2035,  2,  1, 0.33, 2_464_359.83)>]

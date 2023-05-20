@@ -3,6 +3,7 @@
 open System
 open TimeHelper
 open MathHelper
+open Units
 
 let private gregorianCalendarStart = new DateTime(1582, 10, 15)
 
@@ -92,14 +93,14 @@ let gstToUt (gst : DateTime) =
 
     TimeSpan.FromHours B
 
-let gstToLst (longitude : float) (gst : TimeSpan) =
-    longitude / 15.0
+let gstToLst (longitude : float<deg>) (gst : TimeSpan) =
+    longitude / 15.0<deg>
     |> (+) gst.TotalHours
     |> reduceToRange 0.0 24.0
     |> TimeSpan.FromHours
 
-let lstToGst (longitude : float) (lst : TimeSpan) =
-    longitude / 15.0
+let lstToGst (longitude : float<deg>) (lst : TimeSpan) =
+    longitude / 15.0<deg>
     |> (-) lst.TotalHours
     |> reduceToRange 0.0 24.0
     |> TimeSpan.FromHours

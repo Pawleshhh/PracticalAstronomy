@@ -1,4 +1,13 @@
 ﻿module PracticalAstronomy.CoordinateDataTypes
 
-[<Measure>] type deg
-[<Measure>] type rad
+open PracticalAstronomy.Units
+
+type EquatorialHourAngle = {
+    hourAngle: float<deg>;
+    declination: float<deg>
+}
+
+type EquatorialRightAscension = {
+    rightAscension: float<deg>;
+    declination: float<deg>
+}
