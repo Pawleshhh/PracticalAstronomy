@@ -97,3 +97,17 @@ let horToEq latitude hor =
         if sinAz < 0.0 then ha' else 360.0<deg> - ha'
 
     { hourAngle = ha; declination = dec }
+
+let eclToEq dateTime ecl =
+    let lon, lat = ecl.longitude, ecl.latitude
+    let meanObl = meanObliquityWithNutation dateTime
+
+    let sinDec = sinD lat * cosD meanObl + cosD lat * sinD meanObl * sinD lon
+    let dec = asinD sinDec
+
+    let y = (sinD lon * cosD meanObl) - (tanD lat * sinD meanObl)
+    let x = cosD lon
+    let ra' = atan2D y x
+    let ra = ra' / 1.0<deg> |> atan2DRemoveAmbiguity
+
+    { rightAscension = ra * 1.0<deg>; declination = dec }

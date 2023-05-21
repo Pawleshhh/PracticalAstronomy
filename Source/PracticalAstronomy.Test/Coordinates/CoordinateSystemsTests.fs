@@ -39,3 +39,10 @@ let horToEq latitude az alt ha dec =
 let meanObliquity y m d ob =
     let result = meanObliquity (new DateTime(y, m, d))
     Assert.That(result, Is.EqualTo(ob).Within(1E-6))
+
+[<TestCase(139.686_1111,  4.875_277_778, 2009,  7,  6, 143.722_5092, 19.535_699_24)>]
+[<TestCase( 45.900_2777, 10.048_611_111, 2041, 12,  7,  40.215_4901, 26.188_384_41)>]
+[<TestCase(  1.999_7222, 87.050_555_555, 1956,  8, 23, 277.404_8436, 66.484_051_86)>]
+let eclToEq lon lat year month day ra dec =
+    let result = eclToEq (new DateTime(year, month, day)) { longitude = lon; latitude = lat }
+    Assert.That((result.rightAscension, result.declination), Is.EqualTo((ra, dec)).Within(1E-5))
