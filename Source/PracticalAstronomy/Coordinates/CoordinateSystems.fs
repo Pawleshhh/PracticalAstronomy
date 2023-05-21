@@ -111,3 +111,17 @@ let eclToEq dateTime ecl =
     let ra = ra' / 1.0<deg> |> atan2DRemoveAmbiguity
 
     { rightAscension = ra * 1.0<deg>; declination = dec }
+
+let eqToEcl dateTime eq =
+    let ra, dec = eq.rightAscension, eq.declination
+    let meanObl = meanObliquityWithNutation dateTime
+
+    let sinLat = (sinD dec * cosD meanObl) - (cosD dec * sinD meanObl * sinD ra)
+    let lat = asinD sinLat
+
+    let y = (sinD ra * cosD meanObl) + (tanD dec * sinD meanObl)
+    let x = cosD ra
+    let lon' = atan2D y x
+    let lon = lon' / 1.0<deg> |> atan2DRemoveAmbiguity
+
+    { longitude = lon * 1.0<deg>; latitude = lat }
