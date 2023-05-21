@@ -1,5 +1,6 @@
 ﻿module PracticalAstronomy.Test.CoordinateSystemsTests
 
+open System
 open NUnit.Framework
 open PracticalAstronomy.CoordinateSystems
 open PracticalAstronomy.Test.TestUtils
@@ -31,3 +32,10 @@ let eqToHor latitude ha dec az alt =
 let horToEq latitude az alt ha dec =
     let result = horToEq latitude { azimuth = az; altitude = alt }
     Assert.That((result.hourAngle, result.declination), Is.EqualTo((ha, dec)).Within(1E-5))
+
+[<TestCase(2009,  7,  6, 23.438_055)>]
+[<TestCase(2029, 12, 13, 23.435_397)>]
+[<TestCase(1856,  3,  6, 23.457_992)>]
+let meanObliquity y m d ob =
+    let result = meanObliquity (new DateTime(y, m, d))
+    Assert.That(result, Is.EqualTo(ob).Within(1E-6))

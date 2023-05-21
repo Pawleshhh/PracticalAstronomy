@@ -16,3 +16,8 @@ type Horizon = {
     azimuth: float<deg>;
     altitude: float<deg>
 }
+
+type Ecliptic = {
+    longitude: float<deg>;
+    latitude: float<deg>
+}
