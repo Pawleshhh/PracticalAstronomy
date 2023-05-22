@@ -60,3 +60,10 @@ let eqToEcl ra dec year month day lon lat =
 let eqToGal ra dec lon lat =
     let result = eqToGal { rightAscension = ra; declination = dec }
     Assert.That((result.galLongitude, result.galLatitude), Is.EqualTo((lon, lat)).Within(1E-5))
+
+[<TestCase(232.247_883,  51.122_267, 155.250_000, 10.053_056)>]
+[<TestCase( 97.742_161, -60.181_024,   0.000_000,  0.000_000)>]
+[<TestCase(195.748_828, -39.598_461,  59.887_500, -5.190_000)>]
+let galToEq lon lat ra dec =
+    let result = galToEq { galLongitude = lon; galLatitude = lat }
+    Assert.That((result.rightAscension, result.declination), Is.EqualTo((ra, dec)).Within(1E-5))

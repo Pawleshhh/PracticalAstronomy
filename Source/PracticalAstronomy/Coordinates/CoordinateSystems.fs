@@ -139,3 +139,17 @@ let eqToGal eq =
     let lon = lon' / 1.0<deg> |> atan2DRemoveAmbiguity
 
     { galLongitude = lon * 1.0<deg>; galLatitude = lat }
+
+let galToEq gal =
+    let lon, lat = gal.galLongitude, gal.galLatitude
+
+    let sinDec = 
+        (cosD lat * cosD 27.4<deg> * sinD (lon - 33.0<deg>)) + (sinD lat * sinD 27.4<deg>)
+    let dec = asinD sinDec
+
+    let y = cosD lat * cosD (lon - 33.0<deg>)
+    let x = (sinD lat * cosD 27.4<deg>) - (cosD lat * sinD 27.4<deg> * sinD (lon - 33.0<deg>))
+    let ra' = atan2D y x + 192.25<deg>
+    let ra = ra' / 1.0<deg> |> atan2DRemoveAmbiguity
+
+    { rightAscension = ra * 1.0<deg>; declination = dec }
