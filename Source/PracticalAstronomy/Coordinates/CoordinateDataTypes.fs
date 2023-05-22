@@ -18,6 +18,11 @@ type Horizon = {
 }
 
 type Ecliptic = {
-    longitude: float<deg>;
-    latitude: float<deg>
+    eclLongitude: float<deg>;
+    eclLatitude: float<deg>
+}
+
+type Galactic = {
+    galLongitude: float<deg>;
+    galLatitude: float<deg>
 }

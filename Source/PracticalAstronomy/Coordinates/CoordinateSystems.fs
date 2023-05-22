@@ -99,7 +99,7 @@ let horToEq latitude hor =
     { hourAngle = ha; declination = dec }
 
 let eclToEq dateTime ecl =
-    let lon, lat = ecl.longitude, ecl.latitude
+    let lon, lat = ecl.eclLongitude, ecl.eclLatitude
     let meanObl = meanObliquityWithNutation dateTime
 
     let sinDec = sinD lat * cosD meanObl + cosD lat * sinD meanObl * sinD lon
@@ -124,4 +124,18 @@ let eqToEcl dateTime eq =
     let lon' = atan2D y x
     let lon = lon' / 1.0<deg> |> atan2DRemoveAmbiguity
 
-    { longitude = lon * 1.0<deg>; latitude = lat }
+    { eclLongitude = lon * 1.0<deg>; eclLatitude = lat }
+
+let eqToGal eq =
+    let ra, dec = eq.rightAscension, eq.declination
+
+    let sinLat = 
+        (cosD dec * cosD 27.4<deg> * cosD (ra - 192.25<deg>)) + (sinD dec * sinD 27.4<deg>)
+    let lat = asinD sinLat
+
+    let y = sinD dec - (sinD lat * sinD 27.4<deg>)
+    let x = cosD dec * sinD (ra - 192.25<deg>) * cosD 27.4<deg>
+    let lon' = atan2D y x + 33.0<deg>
+    let lon = lon' / 1.0<deg> |> atan2DRemoveAmbiguity
+
+    { galLongitude = lon * 1.0<deg>; galLatitude = lat }

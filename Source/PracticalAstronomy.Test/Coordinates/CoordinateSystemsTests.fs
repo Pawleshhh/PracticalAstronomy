@@ -44,13 +44,19 @@ let meanObliquity y m d ob =
 [<TestCase( 45.900_2777, 10.048_611_111, 2041, 12,  7,  40.215_4901, 26.188_384_41)>]
 [<TestCase(  1.999_7222, 87.050_555_555, 1956,  8, 23, 277.404_8436, 66.484_051_86)>]
 let eclToEq lon lat year month day ra dec =
-    let result = eclToEq (new DateTime(year, month, day)) { longitude = lon; latitude = lat }
+    let result = eclToEq (new DateTime(year, month, day)) { eclLongitude = lon; eclLatitude = lat }
     Assert.That((result.rightAscension, result.declination), Is.EqualTo((ra, dec)).Within(1E-5))
-
 
 [<TestCase(143.722_5092, 19.535_699_24, 2009,  7,  6, 139.686_1111, 4.875_277_778)>]
 [<TestCase( 40.215_4901, 26.188_384_41, 2041, 12,  7,  45.900_2777, 10.048_611_111)>]
 [<TestCase(277.404_8436, 66.484_051_86, 1956,  8, 23,   1.999_7222, 87.050_555_555)>]
 let eqToEcl ra dec year month day lon lat =
     let result = eqToEcl (new DateTime(year, month, day)) { rightAscension = ra; declination = dec }
-    Assert.That((result.longitude, result.latitude), Is.EqualTo((lon, lat)).Within(1E-5))
+    Assert.That((result.eclLongitude, result.eclLatitude), Is.EqualTo((lon, lat)).Within(1E-5))
+
+[<TestCase(155.250_000, 10.053_056, 232.247_883,  51.122_267)>]
+[<TestCase(  0.000_000,  0.000_000,  97.742_161, -60.181_024)>]
+[<TestCase( 59.887_500, -5.190_000, 195.748_828, -39.598_461)>]
+let eqToGal ra dec lon lat =
+    let result = eqToGal { rightAscension = ra; declination = dec }
+    Assert.That((result.galLongitude, result.galLatitude), Is.EqualTo((lon, lat)).Within(1E-5))
