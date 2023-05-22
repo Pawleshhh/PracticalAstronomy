@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Properties\Assembly.fs" />
     <Compile Include="Utilities\Units.fs" />
     <Compile Include="Utilities\MathHelper.fs" />
     <Compile Include="Time\TimeHelper.fs" />

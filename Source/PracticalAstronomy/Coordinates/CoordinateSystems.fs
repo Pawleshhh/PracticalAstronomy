@@ -153,3 +153,16 @@ let galToEq gal =
     let ra = ra' / 1.0<deg> |> atan2DRemoveAmbiguity
 
     { rightAscension = ra * 1.0<deg>; declination = dec }
+
+let internal celestialAngle (coord1: ICoordinateSystem) (coord2: ICoordinateSystem) =
+    let x1, y1 = coord1.x, coord1.y
+    let x2, y2 = coord2.x, coord2.y
+
+    (sinD y1 * sinD y2 + cosD y1 * cosD y2 * cosD (x1 - x2))
+    |> acosD
+
+let celestialAngleEq (eq1: EquatorialRightAscension) (eq2: EquatorialRightAscension) =
+    celestialAngle eq1 eq2
+
+let celestialAngleEcl (ecl1: Ecliptic) (ecl2: Ecliptic) =
+    celestialAngle ecl1 ecl2

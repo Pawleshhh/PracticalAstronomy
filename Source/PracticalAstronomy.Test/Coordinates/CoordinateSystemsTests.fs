@@ -3,6 +3,7 @@
 open System
 open NUnit.Framework
 open PracticalAstronomy.CoordinateSystems
+open PracticalAstronomy.CoordinateDataTypes
 open PracticalAstronomy.Test.TestUtils
 
 [<TestCase(1980, 4, 22, 18.614_353,  -64.0, 278.087_505, 148.098_555)>]
@@ -67,3 +68,13 @@ let eqToGal ra dec lon lat =
 let galToEq lon lat ra dec =
     let result = galToEq { galLongitude = lon; galLatitude = lat }
     Assert.That((result.rightAscension, result.declination), Is.EqualTo((ra, dec)).Within(1E-5))
+
+[<TestCase(78.38208, -8.225_000, 101.05584, -16.686_389, 23.673_850)>]
+let celestialAngle x1 y1 x2 y2 d =
+    let result = celestialAngle { new ICoordinateSystem with
+                                    member this.x = x1
+                                    member this.y = y1 }
+                                { new ICoordinateSystem with
+                                    member this.x = x2
+                                    member this.y = y2 }
+    Assert.That(result, Is.EqualTo(d).Within(1E-5))
