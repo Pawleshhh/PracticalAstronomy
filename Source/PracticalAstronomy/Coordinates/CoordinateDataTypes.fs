@@ -1,5 +1,6 @@
 ﻿module PracticalAstronomy.CoordinateDataTypes
 
+open System
 open PracticalAstronomy.Units
 
 type ICoordinateSystem =
@@ -40,3 +41,20 @@ type Galactic =
     interface ICoordinateSystem with
         member this.x = this.galLongitude
         member this.y = this.galLatitude
+
+type Geographic =
+    { latitude: float<deg>
+      longitude: float<deg> }
+    interface ICoordinateSystem with
+        member this.x = this.latitude
+        member this.y = this.longitude
+
+type RisingAndSettingData = {
+    azimuth: float<deg>
+    time: TimeSpan
+}
+
+type RisingAndSetting = {
+    rising: RisingAndSettingData
+    setting: RisingAndSettingData
+}

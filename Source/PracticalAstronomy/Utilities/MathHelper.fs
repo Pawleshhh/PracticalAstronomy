@@ -14,6 +14,10 @@ let reduceToRange (min: float) (max: float) (value: float) : float =
     elif value > max then (value - min) % range + min
     else value
 
+let reduceToRangeDeg (min: float) (max: float) (value: float<deg>) : float<deg> =
+    reduceToRange min max (value / 1.0<deg>)
+    |> (*) 1.0<deg>
+
 let radToDeg (r: float<rad>) =
     r / 1.0<rad> * (180.0 / Math.PI) * 1.0<deg>
 

@@ -1,5 +1,6 @@
 ﻿module PracticalAstronomy.CoordinateSystems
 
+open System
 open PracticalAstronomy.Units
 open PracticalAstronomy.MathHelper
 open PracticalAstronomy.Time
@@ -84,7 +85,7 @@ let eqToHor latitude eq =
 
     { azimuth = az; altitude = alt }
 
-let horToEq latitude hor =
+let horToEq latitude (hor: Horizon) =
     let az, alt = hor.azimuth, hor.altitude
 
     let sinDec = (sinD alt * sinD latitude) + (cosD alt * cosD latitude * cosD az)
@@ -166,3 +167,30 @@ let celestialAngleEq (eq1: EquatorialRightAscension) (eq2: EquatorialRightAscens
 
 let celestialAngleEcl (ecl1: Ecliptic) (ecl2: Ecliptic) =
     celestialAngle ecl1 ecl2
+
+let risingAndSetting (dateTime: DateTime) v geo eq =
+    let ra, dec = eq.rightAscension, eq.declination
+    let lat, lon = geo.latitude, geo.longitude
+
+    let cosH = - (sinD v + sinD lat * sinD dec) / (cosD lat * cosD dec)
+    if cosH < -1.0 || cosH > 1.0 then
+        None
+    else
+        let azR = 
+            (sinD dec + sinD v * sinD lat) / (cosD v * cosD lat)
+            |> acosD
+            |> reduceToRangeDeg 0.0 360.0
+        let azS = 360.0<deg> - azR
+        
+        let h = acosD cosH
+        let fromHours hrs = TimeSpan.FromHours (hrs / 15.0<deg>)
+
+        let lstR = ra - h |> reduceToRangeDeg 0.0 360.0 |> fromHours
+        let lstS = ra + h |> reduceToRangeDeg 0.0 360.0 |> fromHours
+
+        let lstToUt lst = lstToGst lon lst |> fun gst -> gstToUt (dateTime.Date.Add(gst))
+        let utR = lstToUt lstR
+        let utS = lstToUt lstS
+
+        Some({ rising =  { azimuth = azR; time = utR }; 
+               setting = { azimuth = azS; time = utS }})

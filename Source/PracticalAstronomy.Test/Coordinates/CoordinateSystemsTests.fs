@@ -78,3 +78,15 @@ let celestialAngle x1 y1 x2 y2 d =
                                     member this.x = x2
                                     member this.y = y2 }
     Assert.That(result, Is.EqualTo(d).Within(1E-5))
+
+[<TestCase(2010, 8, 24, 0.57, 30.0, 64.0, 354.833_325, 21.699_997, 64.362_348, 14.271_670, 295.637_652, 4.166_990)>]
+let ``risingAndSetting some value returned`` y m d v lat lon ra dec azR utR azS utS =
+    let result = 
+        risingAndSetting 
+            (new DateTime(y, m, d)) 
+            v 
+            { latitude = lat; longitude = lon } 
+            { rightAscension = ra; declination = dec }
+
+    Assert.That((result.Value.rising.azimuth, result.Value.rising.time.TotalHours), Is.EqualTo((azR, utR)).Within(1E-5), "rising")
+    Assert.That((result.Value.setting.azimuth, result.Value.setting.time.TotalHours), Is.EqualTo((azS, utS)).Within(1E-5), "setting")
