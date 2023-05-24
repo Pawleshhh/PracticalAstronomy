@@ -79,7 +79,9 @@ let celestialAngle x1 y1 x2 y2 d =
                                     member this.y = y2 }
     Assert.That(result, Is.EqualTo(d).Within(1E-5))
 
-[<TestCase(2010, 8, 24, 0.5667, 30.0, 64.0, 354.833_325, 21.699_997, 64.362_348, 14.271_670, 295.637_652, 4.166_990)>]
+[<TestCase(2010,  8, 24, 0.5667, 30.0      , 64.0      , 354.833_325,  21.699_997,  64.362_348, 14.271_670, 295.637_652,  4.166_990)>]
+[<TestCase(2033,  3,  3, 0.1423, 30.0      , 64.0      ,   6.569_042, -42.306_416, 140.876_897,  5.513_053, 219.123_103, 13.299_882)>] // Ankaa star from Phoenix constellation
+[<TestCase(1973, 11, 23, 0.0000, 16.813_186, 15.287_672, 247.358_042, -26.432_972, 117.712_111,  5.909_790, 242.287_889, 16.728_253)>] // Antares
 let ``risingAndSetting some value returned`` y m d v lat lon ra dec azR utR azS utS =
     let result = 
         risingAndSetting 
@@ -90,3 +92,15 @@ let ``risingAndSetting some value returned`` y m d v lat lon ra dec azR utR azS 
 
     Assert.That((result.Value.rising.azimuth, result.Value.rising.time.TotalHours), Is.EqualTo((azR, utR)).Within(1E-5), "rising")
     Assert.That((result.Value.setting.azimuth, result.Value.setting.time.TotalHours), Is.EqualTo((azS, utS)).Within(1E-5), "setting")
+
+[<TestCase(2010, 8, 24, 0.5667, 76.1, 72.3, 37.581_917,  89.261_806)>] // Polaris
+[<TestCase(2033, 3,  3, 0.1423, 53.4, 14.5,  6.569_042, -42.306_416)>] // Ankaa star from Phoenix constellation
+let ``risingAndSetting none value returned`` y m d v lat lon ra dec =
+    let result = 
+        risingAndSetting 
+            (new DateTime(y, m, d)) 
+            v 
+            { latitude = lat; longitude = lon } 
+            { rightAscension = ra; declination = dec }
+
+    Assert.IsTrue(result.IsNone)
