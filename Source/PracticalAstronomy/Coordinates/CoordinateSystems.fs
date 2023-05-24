@@ -176,11 +176,11 @@ let risingAndSetting (dateTime: DateTime) v geo eq =
     if cosH < -1.0 || cosH > 1.0 then
         None
     else
+        let az = (sinD dec + sinD v * sinD lat) / (cosD v * cosD lat) |> acosD
         let azR = 
-            (sinD dec + sinD v * sinD lat) / (cosD v * cosD lat)
-            |> acosD
-            |> reduceToRangeDeg 0.0 360.0
-        let azS = 360.0<deg> - azR
+            az |> reduceToRangeDeg 0.0 360.0
+        let azS = 
+            360.0<deg> - az |> reduceToRangeDeg 0.0 360.0
         
         let h = acosD cosH
         let fromHours hrs = TimeSpan.FromHours (hrs / 15.0<deg>)
