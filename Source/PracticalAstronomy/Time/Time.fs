@@ -1,6 +1,7 @@
 ﻿module PracticalAstronomy.Time
 
 open System
+open PracticalAstronomy.TimeDataTypes
 open TimeHelper
 open MathHelper
 open Units
@@ -104,3 +105,13 @@ let lstToGst (longitude : float<deg>) (lst : TimeSpan) =
     |> (-) lst.TotalHours
     |> reduceToRange 0.0 24.0
     |> TimeSpan.FromHours
+
+let internal epochToDateTime epoch =
+
+    let createDt y = new DateTime(y, 1, 1)
+
+    match epoch with
+    | J1900 -> createDt 1900
+    | J1950 -> createDt 1950
+    | J2000 -> createDt 2000
+    | J2050 -> createDt 2050

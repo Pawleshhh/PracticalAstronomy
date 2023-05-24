@@ -194,3 +194,24 @@ let risingAndSetting (dateTime: DateTime) v geo eq =
 
         Some({ rising =  { azimuth = azR; time = utR }; 
                setting = { azimuth = azS; time = utS }})
+
+let precessionLowPrecision epoch dateTime eq =
+    let ra, dec = eq.rightAscension, eq.declination
+
+    let epochJd = 
+        epochToDateTime epoch
+        |> fun dt -> (dateTimeToJulianDate dt).julianDate
+    let t = 
+        (epochJd - 2_415_020.0) / 36525.0
+    let m = 3.072_34 + (0.00186 * t)
+    let n' = 20.0468 - (0.0085 * t)
+    let n = ((dateTimeToJulianDate dateTime).julianDate - epochJd) / 365.25
+    let s1 = ((m + (n' * sinD ra * tanD dec / 15.0)) * n) / 3600.0
+    let raP = ((s1 * 15.0<deg>) + ra)
+
+    let s2 = (n' * cosD ra * n) / 3600.0 * 1.0<deg>
+    let decP = s2 + dec
+
+    { new ICoordinateSystem with
+        member this.x = raP
+        member this.y = decP }

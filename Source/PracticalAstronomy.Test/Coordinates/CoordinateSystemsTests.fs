@@ -4,6 +4,8 @@ open System
 open NUnit.Framework
 open PracticalAstronomy.CoordinateSystems
 open PracticalAstronomy.CoordinateDataTypes
+open PracticalAstronomy.Time
+open PracticalAstronomy.TimeDataTypes
 open PracticalAstronomy.Test.TestUtils
 
 [<TestCase(1980, 4, 22, 18.614_353,  -64.0, 278.087_505, 148.098_555)>]
@@ -104,3 +106,23 @@ let ``risingAndSetting none value returned`` y m d v lat lon ra dec =
             { rightAscension = ra; declination = dec }
 
     Assert.IsTrue(result.IsNone)
+    
+[<TestCase(1900, 1979, 6, 1, 137.679_167, 14.390_278, 138.772_133, 14.063_316)>]
+[<TestCase(1950, 1979, 6, 1, 137.679_167, 14.390_278, 138.084_092, 14.269_202)>]
+[<TestCase(2000, 1979, 6, 1, 137.679_167, 14.390_278, 137.395_683, 14.475_001)>]
+[<TestCase(2050, 1979, 6, 1, 137.679_167, 14.390_278, 136.706_871, 14.680_723)>]
+let precessionLowPrecision epoch y m d ra dec raP decP =
+    let intEpochToEpoch e =
+        match e with
+        | 1900 -> J1900
+        | 1950 -> J1950
+        | 2000 -> J2000
+        | 2050 -> J2050
+        | _ -> failwith "Wrong epoch"
+
+    let result = 
+        precessionLowPrecision 
+            (intEpochToEpoch epoch) 
+            (new DateTime(y, m, d))
+            { rightAscension = ra; declination = dec }
+    Assert.That((result.x, result.y), Is.EqualTo(raP, decP).Within(1E-5))
