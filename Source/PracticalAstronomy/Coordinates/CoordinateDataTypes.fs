@@ -58,3 +58,8 @@ type RisingAndSetting = {
     rising: RisingAndSettingData
     setting: RisingAndSettingData
 }
+
+type Nutation = {
+    nutationLongitude: float<deg>
+    nutationObliquity: float<deg>
+}

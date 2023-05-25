@@ -8,7 +8,7 @@ open Units
 
 let private gregorianCalendarStart = new DateTime(1582, 10, 15)
 
-let dateTimeToJulianDate (dateTime : DateTime) =
+let dateTimeToJulianDate dateTime =
     let y, m, d = deconstructDateWithTime dateTime
 
     let y', m' =
@@ -32,7 +32,10 @@ let dateTimeToJulianDate (dateTime : DateTime) =
 
     { JulianDate.julianDate = B + C + D + d + 1_720_994.5 }
 
-let julianDateToDateTime (julianDate : JulianDate) =
+let internal dateTimeToJulianDateValue dateTime =
+    (dateTimeToJulianDate dateTime).julianDate
+
+let julianDateToDateTime julianDate =
     let jd = julianDate.julianDate + 0.5
     let I, F = intAndFrac jd
 

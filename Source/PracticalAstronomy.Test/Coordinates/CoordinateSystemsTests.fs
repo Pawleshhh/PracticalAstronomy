@@ -126,3 +126,10 @@ let precessionLowPrecision epoch y m d ra dec raP decP =
             (new DateTime(y, m, d))
             { rightAscension = ra; declination = dec }
     Assert.That((result.x, result.y), Is.EqualTo(raP, decP).Within(1E-5))
+
+[<TestCase(1988, 9,  1,  5.492_910,  9.241_562)>]
+[<TestCase(2028, 5, 15, 14.165_246,  3.942_734)>]
+[<TestCase(2012, 2, 29, 17.042_770, -2.807_452)>]
+let nutation y m d lon obl =
+    let result = nutation (new DateTime(y, m, d))
+    Assert.That((result.nutationLongitude, result.nutationObliquity), Is.EqualTo((lon, obl)).Within(1E-5))

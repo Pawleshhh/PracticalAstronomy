@@ -8,6 +8,10 @@ let intAndFrac (x : float) =
     let fracPart = x - (intPart |> float)
     (intPart, fracPart)
 
+let floatAndFrac (x: float) =
+    let (i, f) = intAndFrac x
+    (i |> float, f)
+
 let reduceToRange (min: float) (max: float) (value: float) : float =
     let range = max - min
     if value < min then (value - max) % range + max

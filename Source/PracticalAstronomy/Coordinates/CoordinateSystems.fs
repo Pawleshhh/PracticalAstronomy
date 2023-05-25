@@ -215,3 +215,20 @@ let precessionLowPrecision epoch dateTime eq =
     { new ICoordinateSystem with
         member this.x = raP
         member this.y = decP }
+
+let nutation dateTime =
+    let jd = dateTimeToJulianDateValue dateTime
+    let t = (jd - 2_415_020.0) / 36_525.0
+    let a = 100.002_136 * t
+    let aInt, _ = floatAndFrac a
+    let l = 279.6967 + 360.0 * (a - aInt)
+    let b = 5.372_617 * t
+    let bInt, _ = floatAndFrac b
+    let moonNode = 
+        259.1833 - 360.0 * (b - bInt)
+        |> reduceToRange 0.0 360.0 
+        |> (*) 1.0<deg>
+    let nutationLon = -17.2 * sinD moonNode - 1.3 * sinD (2.0<deg> * l) |> (*) 1.0<deg>
+    let nutationObl = 9.2 * cosD moonNode + 0.5 * cosD (2.0<deg> * l) |> (*) 1.0<deg>
+
+    { nutationLongitude = nutationLon; nutationObliquity = nutationObl }
