@@ -6,10 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Properties\Assembly.fs" />
+    <Compile Include="Utilities\Units.fs" />
     <Compile Include="Utilities\MathHelper.fs" />
     <Compile Include="Time\TimeHelper.fs" />
     <Compile Include="Time\TimeDataTypes.fs" />
     <Compile Include="Time\Time.fs" />
+    <Compile Include="Coordinates\CoordinateDataTypes.fs" />
+    <Compile Include="Coordinates\CoordinateSystems.fs" />
   </ItemGroup>
 
 </Project>

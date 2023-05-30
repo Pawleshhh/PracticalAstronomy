@@ -2,7 +2,7 @@
 
 public class Time
 {
-    private Time() { }
+    internal Time() { }
 
     public TimeSpan DateTimeToGst(DateTime dateTime)
         => PracticalAstronomy.Time.dateTimeToGst(dateTime);

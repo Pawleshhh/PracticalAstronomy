@@ -1,12 +1,14 @@
 ﻿module PracticalAstronomy.Time
 
 open System
+open PracticalAstronomy.TimeDataTypes
 open TimeHelper
 open MathHelper
+open Units
 
 let private gregorianCalendarStart = new DateTime(1582, 10, 15)
 
-let dateTimeToJulianDate (dateTime : DateTime) =
+let dateTimeToJulianDate dateTime =
     let y, m, d = deconstructDateWithTime dateTime
 
     let y', m' =
@@ -30,7 +32,10 @@ let dateTimeToJulianDate (dateTime : DateTime) =
 
     { JulianDate.julianDate = B + C + D + d + 1_720_994.5 }
 
-let julianDateToDateTime (julianDate : JulianDate) =
+let internal dateTimeToJulianDateValue dateTime =
+    (dateTimeToJulianDate dateTime).julianDate
+
+let julianDateToDateTime julianDate =
     let jd = julianDate.julianDate + 0.5
     let I, F = intAndFrac jd
 
@@ -92,14 +97,24 @@ let gstToUt (gst : DateTime) =
 
     TimeSpan.FromHours B
 
-let gstToLst (longitude : float) (gst : TimeSpan) =
-    longitude / 15.0
+let gstToLst (longitude : float<deg>) (gst : TimeSpan) =
+    longitude / 15.0<deg>
     |> (+) gst.TotalHours
     |> reduceToRange 0.0 24.0
     |> TimeSpan.FromHours
 
-let lstToGst (longitude : float) (lst : TimeSpan) =
-    longitude / 15.0
+let lstToGst (longitude : float<deg>) (lst : TimeSpan) =
+    longitude / 15.0<deg>
     |> (-) lst.TotalHours
     |> reduceToRange 0.0 24.0
     |> TimeSpan.FromHours
+
+let internal epochToDateTime epoch =
+
+    let createDt y = new DateTime(y, 1, 1)
+
+    match epoch with
+    | J1900 -> createDt 1900
+    | J1950 -> createDt 1950
+    | J2000 -> createDt 2000
+    | J2050 -> createDt 2050
