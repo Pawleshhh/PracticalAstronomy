@@ -25,7 +25,7 @@ This repository contains a collection of practical astronomy algorithms implemen
 ## Coordinate systems
 
 - [ ] ~~Converting between decimal degrees and degrees, minutes and seconds~~ - No need for that.
-- [ ] ~~ Converting between angles expressed in degrees and angles expressed in hours~~ - No need for that.
+- [ ] ~~Converting between angles expressed in degrees and angles expressed in hours~~ - No need for that.
 - [x] Converting between right ascension and hour angle
 - [x] Equatorial to horizon coordinate conversion
 - [x] Horizon to equatorial coordinate conversion
