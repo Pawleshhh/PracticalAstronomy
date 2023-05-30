@@ -240,4 +240,3 @@ let aberration sunLon ecl =
     let deltaLat = -20.5<deg> * sinD (sunLon - lon) * sinD lat
     
     { eclLongitude = lon + (deltaLon / 3600.0); eclLatitude = lat + (deltaLat / 3600.0) }
-
