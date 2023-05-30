@@ -232,3 +232,12 @@ let nutation dateTime =
     let nutationObl = 9.2 * cosD moonNode + 0.5 * cosD (2.0<deg> * l) |> (*) 1.0<arcsec>
 
     { nutationLongitude = nutationLon; nutationObliquity = nutationObl }
+
+let aberration sunLon ecl =
+    let lon, lat = ecl.eclLongitude, ecl.eclLatitude
+
+    let deltaLon = -20.5<deg> * cosD (sunLon - lon) / cosD lat
+    let deltaLat = -20.5<deg> * sinD (sunLon - lon) * sinD lat
+    
+    { eclLongitude = lon + (deltaLon / 3600.0); eclLatitude = lat + (deltaLat / 3600.0) }
+

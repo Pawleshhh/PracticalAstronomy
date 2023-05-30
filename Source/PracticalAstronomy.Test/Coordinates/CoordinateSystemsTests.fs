@@ -133,3 +133,10 @@ let precessionLowPrecision epoch y m d ra dec raP decP =
 let nutation y m d lon obl =
     let result = nutation (new DateTime(y, m, d))
     Assert.That((result.nutationLongitude, result.nutationObliquity), Is.EqualTo((lon, obl)).Within(1E-5))
+
+[<TestCase(165.563_304, 352.619_472,  -1.549_000, 352.625_126,  -1.548_981)>]
+[<TestCase(307.574_473, 175.195_556, -10.017_222, 175.199_453, -10.016_491)>]
+[<TestCase(164.047_901,  65.579_722,  35.200_278,  65.580_748,  35.197_031)>]
+let aberration sunLon lon lat dLon dLat =
+    let result = aberration sunLon { eclLongitude = lon; eclLatitude = lat }
+    Assert.That((result.eclLongitude, result.eclLatitude), Is.EqualTo(dLon, dLat).Within(1E-5))
