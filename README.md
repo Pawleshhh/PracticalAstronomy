@@ -40,3 +40,10 @@ This repository contains a collection of practical astronomy algorithms implemen
 - [ ] Precession rigorous method
 - [x] Nutation
 - [x] Aberration
+- [ ] Refraction
+- [ ] Geocentric parallax and the figure of the Earth
+- [ ] Calculating corrections for parallax
+- [ ] Heliographic coordinates
+- [ ] Carrington rotation numbers
+- [ ] Selenographic coordinates
+- [ ] Atmospheric extinction
