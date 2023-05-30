@@ -60,6 +60,6 @@ type RisingAndSetting = {
 }
 
 type Nutation = {
-    nutationLongitude: float<deg>
-    nutationObliquity: float<deg>
+    nutationLongitude: float<arcsec>
+    nutationObliquity: float<arcsec>
 }

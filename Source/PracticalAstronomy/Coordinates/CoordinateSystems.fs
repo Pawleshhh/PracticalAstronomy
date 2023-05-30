@@ -228,7 +228,7 @@ let nutation dateTime =
         259.1833 - 360.0 * (b - bInt)
         |> reduceToRange 0.0 360.0 
         |> (*) 1.0<deg>
-    let nutationLon = -17.2 * sinD moonNode - 1.3 * sinD (2.0<deg> * l) |> (*) 1.0<deg>
-    let nutationObl = 9.2 * cosD moonNode + 0.5 * cosD (2.0<deg> * l) |> (*) 1.0<deg>
+    let nutationLon = -17.2 * sinD moonNode - 1.3 * sinD (2.0<deg> * l) |> (*) 1.0<arcsec>
+    let nutationObl = 9.2 * cosD moonNode + 0.5 * cosD (2.0<deg> * l) |> (*) 1.0<arcsec>
 
     { nutationLongitude = nutationLon; nutationObliquity = nutationObl }
