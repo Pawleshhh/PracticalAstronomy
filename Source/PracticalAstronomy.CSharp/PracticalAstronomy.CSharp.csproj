@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Title>PracticalAstronomy</Title>
+    <Title>PracticalAstronomy.CSharp</Title>
     <Authors>Pawleshhh</Authors>
     <PackageProjectUrl>https://github.com/Pawleshhh/PracticalAstronomy</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>

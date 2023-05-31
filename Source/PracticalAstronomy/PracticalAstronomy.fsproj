@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>PracticalAstronomy</Title>
+    <Authors>Pawleshhh</Authors>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>astronomy</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +19,13 @@
     <Compile Include="Time\Time.fs" />
     <Compile Include="Coordinates\CoordinateDataTypes.fs" />
     <Compile Include="Coordinates\CoordinateSystems.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
