@@ -240,3 +240,21 @@ let aberration sunLon ecl =
     let deltaLat = -20.5<deg> * sinD (sunLon - lon) * sinD lat
     
     { eclLongitude = lon + (deltaLon / 3600.0); eclLatitude = lat + (deltaLat / 3600.0) }
+
+let refraction (temp: float<celsius>) (pressure: float<mbar>) (geo: Geographic) (eqHa: EquatorialHourAngle) =
+    let hor = eqToHor geo.latitude eqHa
+    let a = hor.altitude / 1.0<deg>
+    let t = temp / 1.0<celsius>
+    let p = pressure / 1.0<mbar>
+
+    let calculateR () =
+        if a > 15.0 then
+            let z = 90.0<deg> - hor.altitude
+            (0.00452 * p * tanD z) / (273.0 + t)
+        else
+            (p * (0.1594 + 0.0196 * a + 0.00002 * a * a))
+            |> (/) ((273.0 + t) * (1.0 + 0.505 * a + 0.0845 * a * a))
+
+    let a' = calculateR() + a
+
+    horToEq geo.latitude ({ azimuth = hor.azimuth; altitude = (a' * 1.0<deg>) })

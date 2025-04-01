@@ -2,9 +2,9 @@
 
 open System
 open NUnit.Framework
+open PracticalAstronomy.Units
 open PracticalAstronomy.CoordinateSystems
 open PracticalAstronomy.CoordinateDataTypes
-open PracticalAstronomy.Time
 open PracticalAstronomy.TimeDataTypes
 open PracticalAstronomy.Test.TestUtils
 
@@ -140,3 +140,12 @@ let nutation (y: int) m d lon obl =
 let aberration sunLon lon lat dLon dLat =
     let result = aberration sunLon { eclLongitude = lon; eclLatitude = lat }
     Assert.That((result.eclLongitude, result.eclLatitude), Is.EqualTo((dLon, dLat)).Within(1E-5))
+
+[<TestCase(21.7, 1012.0, 43.0,  19.876071        , 78.00027777777778,  19.853184 , 77.9901075)>]
+[<TestCase(13.0, 1008.0, 52.0,  87.93333333333334, 23.21944444444444,  87.901    , 23.253888888888888)>]
+[<TestCase(-3.0,  950.0, 78.0, 161.967738        , 51.12138888888889, 161.9651805, 51.1405353)>]
+let refraction temp pressure lat ha dec haR decR =
+    let geo = { longitude = 0.0<deg>; latitude = lat }
+    let eqHa = { hourAngle = ha; declination = dec }
+    let result = refraction temp pressure geo eqHa
+    Assert.That((result.hourAngle, result.declination), Is.EqualTo((haR, decR)).Within(1E-3))
