@@ -5,10 +5,10 @@ open System
 let timeToHours t =
     TimeSpan.FromDays(t).TotalHours
 
-let createDateTime y m d t =
+let createDateTime (y: int) m d t =
     (new DateTime(y, m, d)).AddHours(timeToHours t)
 
-let createDateTimeWithDecimalHours y m d t =
+let createDateTimeWithDecimalHours (y: int) m d t =
     (new DateTime(y, m, d)).AddHours(t)
 
 let hmsToTimeSpan h m s mil =

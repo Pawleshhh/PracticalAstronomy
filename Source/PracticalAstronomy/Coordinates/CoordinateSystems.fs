@@ -45,7 +45,7 @@ let private nutationObliquity dateTime =
     let N2 = 2.0 * N1'
 
     let DDO1 = (9.21 + 0.00091 * T) * cos N1'
-    let DDO2 = DDO1+ (0.5522 - 0.00029 * T) * cos l2 - 0.0904 * cos N2
+    let DDO2 = DDO1 + (0.5522 - 0.00029 * T) * cos l2 - 0.0904 * cos N2
     let DDO3 = DDO2 + 0.0884 * cos D2 + 0.0216 * cos (l2 + M1)
     let DDO4 = DDO3 + 0.0183 * cos (D2 - N1') + 0.0113 * cos (D2 + M2)
     let DDO5 = DDO4 - 0.0093 * cos (l2 - M1) - 0.0066 * cos (l2 - N1')
