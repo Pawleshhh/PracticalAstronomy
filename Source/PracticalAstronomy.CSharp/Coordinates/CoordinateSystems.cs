@@ -114,4 +114,11 @@ public class CoordinateSystems
         return new Ecliptic(result.eclLongitude, result.eclLatitude);
     }
 
+    public EquatorialHourAngle Refraction(double temperature, double pressure, Geographic geo, EquatorialHourAngle eqHa)
+    {
+        var result = FS.CoordinateSystems.refraction(temperature, pressure, geo.ToFSharp(), eqHa.ToFSharp());
+
+        return new EquatorialHourAngle(result.hourAngle, result.declination);
+    }
+
 }
