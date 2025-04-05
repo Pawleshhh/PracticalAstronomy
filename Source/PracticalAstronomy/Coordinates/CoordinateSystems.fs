@@ -274,23 +274,23 @@ let geocentricParallax (h: float<meter>) (geo: Geographic) =
 
 let parallaxCorrection h p dateTime geo (eqRa: EquatorialRightAscension) =
     let (ra, dec) = (eqRa.rightAscension, eqRa.declination)
-    let ha = raToHa dateTime geo.longitude ra
+    let ha = (raToHa dateTime geo.longitude ra)
 
     let (psin, pcos) = geocentricParallax h geo
 
     let r = (1.0 / sinD p)
     
-    let delta = 
+    let delta =
         (pcos * sinD ha)
-        |> (/) (r * cosD dec - pcos * cosD ha)
+        |> divBy ((r * cosD dec) - (pcos * cosD ha))
         |> atanD
 
-    let ha' = (ha + delta) / 15.0
+    let ha' = (ha + delta)
     let ra' = ra - delta
 
     let dec' =
-        (r * sinD dec - psin)
-        |> (/) (r * cosD dec * cosD ha - pcos)
+        ((r * sinD dec) - psin)
+        |> divBy ((r * cosD dec * cosD ha) - pcos)
         |> (*) (cosD ha')
         |> atanD
 
