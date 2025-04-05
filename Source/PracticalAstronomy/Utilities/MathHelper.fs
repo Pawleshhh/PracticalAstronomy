@@ -58,5 +58,12 @@ let atan2D y x =
 let atan2DRemoveAmbiguity x =
     x - (360.0 * floor (x / 360.0))
 
-let divBy (y: float) (x: float) =
-    x / y
+/// <summary>
+/// Divides two floating point numbers. The order of parameters is reversed so the use of it in pipes is more logical.
+/// </summary>
+let inline (/!) (y: float) (x: float) = x / y
+
+/// <summary>
+/// Subtracts two floating point numbers. The order of parameters is reversed so the use of it in pipes is more logical.
+/// </summary>
+let inline (-!) (y: float) (x: float) = x - y

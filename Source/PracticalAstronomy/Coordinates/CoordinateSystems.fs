@@ -253,7 +253,7 @@ let refraction (temp: float<celsius>) (pressure: float<mbar>) (geo: Geographic) 
             (0.00452 * p * tanD z) / (273.0 + t)
         else
             (p * (0.1594 + 0.0196 * a + 0.00002 * a * a))
-            |> (/) ((273.0 + t) * (1.0 + 0.505 * a + 0.0845 * a * a))
+            |> (/!) ((273.0 + t) * (1.0 + 0.505 * a + 0.0845 * a * a))
 
     let a' = calculateR() + a
 
@@ -282,7 +282,7 @@ let parallaxCorrection h p dateTime geo (eqRa: EquatorialRightAscension) =
     
     let delta =
         (pcos * sinD ha)
-        |> divBy ((r * cosD dec) - (pcos * cosD ha))
+        |> (/!) ((r * cosD dec) - (pcos * cosD ha))
         |> atanD
 
     let ha' = (ha + delta)
@@ -290,7 +290,7 @@ let parallaxCorrection h p dateTime geo (eqRa: EquatorialRightAscension) =
 
     let dec' =
         ((r * sinD dec) - psin)
-        |> divBy ((r * cosD dec * cosD ha) - pcos)
+        |> (/!) ((r * cosD dec * cosD ha) - pcos)
         |> (*) (cosD ha')
         |> atanD
 
