@@ -10,3 +10,6 @@
 
 // Atmospheric pressure
 [<Measure>] type mbar
+
+// Distance
+[<Measure>] type meter

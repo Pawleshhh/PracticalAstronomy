@@ -149,3 +149,13 @@ let refraction temp pressure lat ha dec haR decR =
     let eqHa = { hourAngle = ha; declination = dec }
     let result = refraction temp pressure geo eqHa
     Assert.That((result.hourAngle, result.declination), Is.EqualTo((haR, decR)).Within(1E-3))
+
+[<TestCase(60.0, 1.0191666666666666, 1979, 2, 26, 16, 45, 0, 50.0, -100.0, 338.82916666666665, -7.686944444444444, 339.18008100000003, -8.5381655)>]
+[<TestCase(267.0, 1.0, 2025, 4, 5, 17, 55, 52, 1, 46, 45.525000000000006, 80.51027777777777, 39.797373, 80.2256124)>]
+[<TestCase(-5.0, 0.98, 2033, 12, 31, 4, 1, 1, 53, 14, 172.5, 33.55916666666666, 172.4792475, 33.2312665)>]
+let parallaxCorrection h p (y: int) m d hr min s lat lon ra dec ra' dec' =
+    let dt = new DateTime(y, m, d, hr, min, s)
+    let geo = { latitude = lat; longitude = lon }
+    let eqRa = { rightAscension = ra; declination = dec }
+    let result = parallaxCorrection h p dt geo eqRa
+    Assert.That((result.rightAscension, result.declination), Is.EqualTo((ra', dec')).Within(1E-5))

@@ -258,3 +258,41 @@ let refraction (temp: float<celsius>) (pressure: float<mbar>) (geo: Geographic) 
     let a' = calculateR() + a
 
     horToEq geo.latitude ({ azimuth = hor.azimuth; altitude = (a' * 1.0<deg>) })
+
+let geocentricParallax (h: float<meter>) (geo: Geographic) =
+    let u = 
+        (0.996_647 * tanD geo.latitude)
+        |> atanD
+    let h' = h / 6378140.0<meter>
+
+    let psin = 
+        (0.996647 * sinD u) + (h' * sinD geo.latitude)
+    let pcos = 
+        cosD u + (h' * cosD geo.latitude)
+
+    (psin, pcos)
+
+let parallaxCorrection h p dateTime geo (eqRa: EquatorialRightAscension) =
+    let (ra, dec) = (eqRa.rightAscension, eqRa.declination)
+    let ha = (raToHa dateTime geo.longitude ra)
+
+    let (psin, pcos) = geocentricParallax h geo
+
+    let r = (1.0 / sinD p)
+    
+    let delta =
+        (pcos * sinD ha)
+        |> divBy ((r * cosD dec) - (pcos * cosD ha))
+        |> atanD
+
+    let ha' = (ha + delta)
+    let ra' = ra - delta
+
+    let dec' =
+        ((r * sinD dec) - psin)
+        |> divBy ((r * cosD dec * cosD ha) - pcos)
+        |> (*) (cosD ha')
+        |> atanD
+
+    { rightAscension = ra'; declination = dec' }
+    
