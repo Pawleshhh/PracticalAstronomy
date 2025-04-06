@@ -49,6 +49,13 @@ type Geographic =
         member this.x = this.latitude
         member this.y = this.longitude
 
+type Heliographic =
+    { heliLongitude: float<deg>
+      heliLatitude: float<deg> }
+    interface ICoordinateSystem with
+        member this.x = this.heliLongitude
+        member this.y = this.heliLatitude
+
 type RisingAndSettingData = {
     azimuth: float<deg>
     time: TimeSpan

@@ -160,3 +160,10 @@ let parallaxCorrection h p (y: int) m d hr min s lat lon ra dec ra' dec' =
     let eqRa = { rightAscension = ra; declination = dec }
     let result = parallaxCorrection h p dt geo eqRa
     Assert.That((result.rightAscension, result.declination), Is.EqualTo((ra', dec')).Within(1E-5))
+
+[<TestCase(1988, 5, 1, 0, 0, 0, 40.843611111111116, 103.47, -4.13)>]
+let heliographicCoordinates y m d hh mm s sunLon heliLon heliLat =
+    // Temporary test, heliohraphicCoordinates will not return center of the sun
+    let dt = new DateTime(y, m, d, hh, mm, s)
+    let result = heliographicCoordinates dt sunLon
+    Assert.That((result.heliLongitude, result.heliLatitude), Is.EqualTo((heliLon, heliLat)).Within(1E-2))

@@ -58,6 +58,12 @@ let atan2D y x =
 let atan2DRemoveAmbiguity x =
     x - (360.0 * floor (x / 360.0))
 
+let degHmsToDec (h: int) m s =
+    abs h
+    |> float
+    |> fun ah -> ah + (float m / 60.0) + (float s / 3600.0)
+    |> (*) (if h < 0 then -1.0 else 1.0)
+
 /// <summary>
 /// Divides two floating point numbers. The order of parameters is reversed so the use of it in pipes is more logical.
 /// </summary>

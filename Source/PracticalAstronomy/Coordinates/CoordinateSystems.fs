@@ -296,3 +296,34 @@ let parallaxCorrection h p dateTime geo (eqRa: EquatorialRightAscension) =
 
     { rightAscension = ra'; declination = dec' }
     
+let heliographicCoordinates (dateTime: DateTime) (sunLon: float<deg>) =
+    let jd = dateTimeToJulianDate dateTime
+    let t = 
+        jd.julianDate
+        |> (-!) 2_415_020.0
+        |> (/!) 36_525.0
+    let m' = 
+        ((360.0) / (25.38) * (jd.julianDate - 2_398_220.0))
+        |> reduceToRange 0.0 360.0
+    let m = 360.0 - m'
+    let ascNodeLon = 
+        (84.0 * t / 60.0)
+        |> (+) (degHmsToDec 74 22 0)
+        |> (*) 1.0<deg>
+
+    let i = 7.25<deg>
+
+    let yl0 = sinD (ascNodeLon - sunLon) * cosD i
+    let xl0 = -cosD (ascNodeLon - sunLon)
+    let a = 
+        ((atan2D yl0 xl0) / 1.0<deg>)
+        |> atan2DRemoveAmbiguity
+    let l0 = 
+        (a + m)
+        |> (*) 1.0<deg>
+        |> fun l -> if l > 360.0<deg> then l - 360.0<deg> else l
+    let b0 =
+        (sinD (sunLon - ascNodeLon) * sinD i)
+        |> asinD
+
+    { heliLongitude = l0; heliLatitude = b0 }
