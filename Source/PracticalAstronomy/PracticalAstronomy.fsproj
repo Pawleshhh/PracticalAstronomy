@@ -19,6 +19,7 @@
     <Compile Include="Time\Time.fs" />
     <Compile Include="Coordinates\CoordinateDataTypes.fs" />
     <Compile Include="Coordinates\CoordinateSystems.fs" />
+    <Compile Include="Sun\Sun.fs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -295,8 +295,17 @@ let parallaxCorrection h p dateTime geo (eqRa: EquatorialRightAscension) =
         |> atanD
 
     { rightAscension = ra'; declination = dec' }
-    
-let heliographicCoordinates (dateTime: DateTime) (sunLon: float<deg>) =
+
+let private positionangleOfSunRotationAxis sunLon obl ascNodeLon i =
+    let t1 = 
+        (-cosD sunLon * tanD obl)
+        |> atanD
+    let t2 =
+        (-cosD (ascNodeLon - sunLon) * tanD i)
+        |> atanD
+    (t1, t2)
+
+let heliographicCoordinates dateTime sunLonCalc theta (s: float<deg>) (rho1: float<deg>) =
     let jd = dateTimeToJulianDate dateTime
     let t = 
         jd.julianDate
@@ -313,6 +322,8 @@ let heliographicCoordinates (dateTime: DateTime) (sunLon: float<deg>) =
 
     let i = 7.25<deg>
 
+    let sunLon= sunLonCalc dateTime
+
     let yl0 = sinD (ascNodeLon - sunLon) * cosD i
     let xl0 = -cosD (ascNodeLon - sunLon)
     let a = 
@@ -326,4 +337,24 @@ let heliographicCoordinates (dateTime: DateTime) (sunLon: float<deg>) =
         (sinD (sunLon - ascNodeLon) * sinD i)
         |> asinD
 
-    { heliLongitude = l0; heliLatitude = b0 }
+    let obl = meanObliquity dateTime
+    let p = 
+        (positionangleOfSunRotationAxis sunLon obl ascNodeLon i)
+        |> fun (t1, t2) -> t1 + t2
+
+    let rho = 
+        (rho1 / s)
+        |> asinD
+        |> (-!) rho1
+        
+    let b =
+        (sinD b0 * cosD rho + cosD b0 * sinD rho * cosD (p - theta))
+        |> asinD
+    let l =
+        (sinD rho * sinD (p - theta))
+        |> (/!) (cosD b)
+        |> asinD
+        |> (+) l0
+        |> fun v -> if v > 360.0<deg> then v - 360.0<deg> else v
+
+    { heliLongitude = l; heliLatitude = b }
