@@ -11,95 +11,95 @@ public interface ICoordinateSystem
         => new BaseCoordinateSystem(X, Y);
 }
 
-public abstract record FSharpData<T>
+internal interface IFSharpData<T>
 {
-    internal abstract T ToFSharp();
+    public T ToFSharp();
 }
 
-public record EquatorialHourAngle(double HourAngle, double Declination) : FSharpData<FS.CoordinateDataTypes.EquatorialHourAngle>, ICoordinateSystem
+public record EquatorialHourAngle(double HourAngle, double Declination) : IFSharpData<FS.CoordinateDataTypes.EquatorialHourAngle>, ICoordinateSystem
 {
     double ICoordinateSystem.X => HourAngle;
     double ICoordinateSystem.Y => Declination;
 
-    internal override CoordinateDataTypes.EquatorialHourAngle ToFSharp()
+    public CoordinateDataTypes.EquatorialHourAngle ToFSharp()
     {
         return new CoordinateDataTypes.EquatorialHourAngle(HourAngle, Declination);
     }
 }
 
-public record EquatorialRightAscension(double RightAscension, double Declination) : FSharpData<FS.CoordinateDataTypes.EquatorialRightAscension>, ICoordinateSystem
+public record EquatorialRightAscension(double RightAscension, double Declination) : IFSharpData<FS.CoordinateDataTypes.EquatorialRightAscension>, ICoordinateSystem
 {
     double ICoordinateSystem.X => RightAscension;
     double ICoordinateSystem.Y => Declination;
 
-    internal override CoordinateDataTypes.EquatorialRightAscension ToFSharp()
+    public CoordinateDataTypes.EquatorialRightAscension ToFSharp()
     {
         return new CoordinateDataTypes.EquatorialRightAscension(RightAscension, Declination);
     }
 }
 
-public record Horizon(double Azimuth, double Altitude) : FSharpData<FS.CoordinateDataTypes.Horizon>, ICoordinateSystem
+public record Horizon(double Azimuth, double Altitude) : IFSharpData<FS.CoordinateDataTypes.Horizon>, ICoordinateSystem
 {
     double ICoordinateSystem.X => Azimuth;
     double ICoordinateSystem.Y => Altitude;
 
-    internal override CoordinateDataTypes.Horizon ToFSharp()
+    public CoordinateDataTypes.Horizon ToFSharp()
     {
         return new CoordinateDataTypes.Horizon(Azimuth, Altitude);
     }
 }
 
-public record Ecliptic(double Longitude, double Latitude) : FSharpData<FS.CoordinateDataTypes.Ecliptic>, ICoordinateSystem
+public record Ecliptic(double Longitude, double Latitude) : IFSharpData<FS.CoordinateDataTypes.Ecliptic>, ICoordinateSystem
 {
     double ICoordinateSystem.X => Longitude;
     double ICoordinateSystem.Y => Latitude;
 
-    internal override CoordinateDataTypes.Ecliptic ToFSharp()
+    public CoordinateDataTypes.Ecliptic ToFSharp()
     {
         return new CoordinateDataTypes.Ecliptic(Longitude, Latitude);
     }
 }
 
-public record Galactic(double Longitude, double Latitude) : FSharpData<FS.CoordinateDataTypes.Galactic>, ICoordinateSystem
+public record Galactic(double Longitude, double Latitude) : IFSharpData<FS.CoordinateDataTypes.Galactic>, ICoordinateSystem
 {
     double ICoordinateSystem.X => Longitude;
     double ICoordinateSystem.Y => Latitude;
 
-    internal override CoordinateDataTypes.Galactic ToFSharp()
+    public CoordinateDataTypes.Galactic ToFSharp()
     {
         return new CoordinateDataTypes.Galactic(Longitude, Latitude);
     }
 }
 
-public record Geographic(double Latitude, double Longitude) : FSharpData<FS.CoordinateDataTypes.Geographic>, ICoordinateSystem
+public record Geographic(double Latitude, double Longitude) : IFSharpData<FS.CoordinateDataTypes.Geographic>, ICoordinateSystem
 {
     double ICoordinateSystem.X => Latitude;
     double ICoordinateSystem.Y => Longitude;
 
-    internal override CoordinateDataTypes.Geographic ToFSharp()
+    public CoordinateDataTypes.Geographic ToFSharp()
     {
         return new CoordinateDataTypes.Geographic(Latitude, Longitude);
     }
 }
 
-public record RisingAndSettingData(double Azimuth, TimeSpan Time) : FSharpData<FS.CoordinateDataTypes.RisingAndSettingData>
+public record RisingAndSettingData(double Azimuth, TimeSpan Time) : IFSharpData<FS.CoordinateDataTypes.RisingAndSettingData>
 {
-    internal override CoordinateDataTypes.RisingAndSettingData ToFSharp()
+    public CoordinateDataTypes.RisingAndSettingData ToFSharp()
     {
         return new CoordinateDataTypes.RisingAndSettingData(Azimuth, Time);
     }
 }
-public record RisingAndSetting(RisingAndSettingData Rising, RisingAndSettingData Setting): FSharpData<FS.CoordinateDataTypes.RisingAndSetting>
+public record RisingAndSetting(RisingAndSettingData Rising, RisingAndSettingData Setting): IFSharpData<FS.CoordinateDataTypes.RisingAndSetting>
 {
-    internal override CoordinateDataTypes.RisingAndSetting ToFSharp()
+    public  CoordinateDataTypes.RisingAndSetting ToFSharp()
     {
         return new CoordinateDataTypes.RisingAndSetting(Rising.ToFSharp(), Setting.ToFSharp());
     }
 }
 
-public record Nutation(double NutationLongitude, double NutationObliquity) : FSharpData<FS.CoordinateDataTypes.Nutation>
+public record Nutation(double NutationLongitude, double NutationObliquity) : IFSharpData<FS.CoordinateDataTypes.Nutation>
 {
-    internal override CoordinateDataTypes.Nutation ToFSharp()
+    public CoordinateDataTypes.Nutation ToFSharp()
     {
         return new CoordinateDataTypes.Nutation(NutationLongitude, NutationObliquity);
     }

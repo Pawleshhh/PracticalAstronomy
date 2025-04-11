@@ -95,7 +95,7 @@ public class CoordinateSystems
 
     public ICoordinateSystem PrecessionLowPrecision(Epoch epoch, DateTime dateTime, EquatorialRightAscension eq)
     {
-        var result = FS.CoordinateSystems.precessionLowPrecision(epoch.ToFSharpEpoch(), dateTime, eq.ToFSharp());
+        var result = FS.CoordinateSystems.precessionLowPrecision(epoch.ToFSharp(), dateTime, eq.ToFSharp());
 
         return ICoordinateSystem.Create(result.x, result.y);
     }
@@ -119,6 +119,12 @@ public class CoordinateSystems
         var result = FS.CoordinateSystems.refraction(temperature, pressure, geo.ToFSharp(), eqHa.ToFSharp());
 
         return new EquatorialHourAngle(result.hourAngle, result.declination);
+    }
+
+    public EquatorialRightAscension ParallaxCorrection(double height, double equatorialParallax, DateTime dateTime, Geographic geo, EquatorialRightAscension eqRa)
+    {
+        var result = FS.CoordinateSystems.parallaxCorrection(height, equatorialParallax, dateTime, geo.ToFSharp(), eqRa.ToFSharp());
+        return new(result.rightAscension, result.declination);
     }
 
 }
