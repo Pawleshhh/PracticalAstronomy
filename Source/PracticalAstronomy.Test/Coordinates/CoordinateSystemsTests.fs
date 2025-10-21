@@ -163,6 +163,7 @@ let parallaxCorrection h p (y: int) m d hr min s lat lon ra dec ra' dec' =
     Assert.That((result.rightAscension, result.declination), Is.EqualTo((ra', dec')).Within(1E-5))
 
 [<TestCase(1988, 5, 1, 220.0, 0.2644444444444444, 0.175, 142.611, -19.945)>]
+//[<TestCase(2025, 9, 7, 199.0, 0.22166666666666668, )>]
 let heliographicCoordinates (y: int) m d theta sunRadius rho1 heliLon heliLat =
     let dt = new DateTime(y, m, d)
     let sunLonCalc = positionOfSun (JEpoch(2010))

@@ -104,3 +104,14 @@ public record Nutation(double NutationLongitude, double NutationObliquity) : IFS
         return new CoordinateDataTypes.Nutation(NutationLongitude, NutationObliquity);
     }
 }
+
+public record Heliographic(double HeliLongitude, double HeliLatitude) : IFSharpData<FS.CoordinateDataTypes.Heliographic>, ICoordinateSystem
+{
+    double ICoordinateSystem.X => HeliLongitude;
+    double ICoordinateSystem.Y => HeliLatitude;
+
+    public CoordinateDataTypes.Heliographic ToFSharp()
+    {
+        return new CoordinateDataTypes.Heliographic(HeliLongitude, HeliLatitude);
+    }
+}
